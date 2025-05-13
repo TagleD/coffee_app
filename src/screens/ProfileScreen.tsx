@@ -1,0 +1,225 @@
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { Feather } from "@expo/vector-icons"
+import { SafeAreaView } from "react-native-safe-area-context"
+import Card from "../components/Card"
+import ProgressBar from "../components/ProgressBar"
+
+const ProfileScreen = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.profileHeader}>
+          <View style={styles.avatarContainer}>
+            <Feather name="coffee" size={40} color="#93c5fd" />
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>Alex Johnson</Text>
+            <Text style={styles.profileSubtitle}>Coffee Enthusiast</Text>
+            <View style={styles.beansContainer}>
+              <Feather name="coffee" size={16} color="#93c5fd" style={styles.beansIcon} />
+              <Text style={styles.beansCount}>2,450</Text>
+              <Text style={styles.beansLabel}>beans</Text>
+            </View>
+          </View>
+        </View>
+
+        <Card>
+          <View style={styles.membershipCard}>
+            <View style={styles.membershipHeader}>
+              <View>
+                <Text style={styles.membershipTitle}>Gold Member</Text>
+                <Text style={styles.membershipDate}>Since October 2023</Text>
+              </View>
+              <Feather name="award" size={24} color="#fbbf24" />
+            </View>
+            <ProgressBar value={65} />
+            <View style={styles.membershipProgress}>
+              <Text style={styles.membershipLevel}>Current: Gold</Text>
+              <Text style={styles.membershipNext}>Next: Platinum (5,000 beans)</Text>
+            </View>
+          </View>
+        </Card>
+
+        <Text style={styles.sectionTitle}>Account</Text>
+        <Card>
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <Feather name="clock" size={20} color="#60a5fa" style={styles.menuIcon} />
+              <Text style={styles.menuText}>Purchase History</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#60a5fa" />
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <Feather name="gift" size={20} color="#60a5fa" style={styles.menuIcon} />
+              <Text style={styles.menuText}>Rewards</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#60a5fa" />
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <Feather name="credit-card" size={20} color="#60a5fa" style={styles.menuIcon} />
+              <Text style={styles.menuText}>Payment Methods</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#60a5fa" />
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <Feather name="calendar" size={20} color="#60a5fa" style={styles.menuIcon} />
+              <Text style={styles.menuText}>Subscriptions</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#60a5fa" />
+          </TouchableOpacity>
+        </Card>
+
+        <Text style={styles.sectionTitle}>Preferences</Text>
+        <Card>
+          <TouchableOpacity style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <Feather name="settings" size={20} color="#60a5fa" style={styles.menuIcon} />
+              <Text style={styles.menuText}>Settings</Text>
+            </View>
+            <Feather name="chevron-right" size={20} color="#60a5fa" />
+          </TouchableOpacity>
+        </Card>
+
+        <TouchableOpacity style={styles.signOutButton}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  profileHeader: {
+    flexDirection: "row",
+    marginBottom: 24,
+  },
+  avatarContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#1e3a8a",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  profileInfo: {
+    justifyContent: "center",
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 4,
+  },
+  profileSubtitle: {
+    fontSize: 14,
+    color: "#60a5fa",
+    marginBottom: 8,
+  },
+  beansContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  beansIcon: {
+    marginRight: 4,
+  },
+  beansCount: {
+    color: "#fff",
+    fontWeight: "bold",
+    marginRight: 4,
+  },
+  beansLabel: {
+    color: "#60a5fa",
+    fontSize: 12,
+  },
+  membershipCard: {
+    padding: 16,
+  },
+  membershipHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  membershipTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#fff",
+  },
+  membershipDate: {
+    fontSize: 12,
+    color: "#93c5fd",
+  },
+  membershipProgress: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
+  membershipLevel: {
+    fontSize: 12,
+    color: "#93c5fd",
+  },
+  membershipNext: {
+    fontSize: 12,
+    color: "#93c5fd",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#fff",
+    marginTop: 24,
+    marginBottom: 8,
+    paddingHorizontal: 4,
+  },
+  menuItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  menuItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  menuIcon: {
+    marginRight: 12,
+  },
+  menuText: {
+    fontSize: 16,
+    color: "#fff",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#1e3a8a",
+  },
+  signOutButton: {
+    borderWidth: 1,
+    borderColor: "#1e40af",
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+    marginTop: 24,
+    marginBottom: 16,
+  },
+  signOutText: {
+    color: "#60a5fa",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+})
+
+export default ProfileScreen
