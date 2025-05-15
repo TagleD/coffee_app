@@ -1,61 +1,107 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { observer } from "mobx-react-lite";
-import { useNavigation } from "@react-navigation/native"; // добавили это
-import authStore from "../stores/AuthStore";
 
-const CodeConfirmScreen = observer(() => {
-  const [code, setCode] = useState("");
-  const navigation = useNavigation(); // и это
+import React, { useState } from "react"
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native"
+import { useNavigation, CommonActions } from "@react-navigation/native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
-  const onConfirm = () => {
+export default function ConfirmCodeScreen({ route }) {
+  const { phone } = route.params
+  const navigation = useNavigation()
+  const [code, setCode] = useState("")
+
+  const handleConfirm = () => {
     if (code.length === 4) {
-      authStore.confirmCode(code);
-      navigation.navigate("Tabs" as never); // переход
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Tabs" }],
+        })
+      )
     }
-  };
-
-  if (authStore.isAuthenticated) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.success}>Вы вошли как {authStore.phone}</Text>
-      </View>
-    );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Введите код из SMS</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="1234"
-        maxLength={4}
-        value={code}
-        onChangeText={setCode}
-      />
-      <Button title="Подтвердить" onPress={onConfirm} />
-    </View>
-  );
-});
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.inner}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <Text style={styles.title}>Код подтверждения</Text>
+        <Text style={styles.subtitle}>
+          Введите код, отправленный на{" "}
+          <Text style={styles.phoneNumber}>{phone}</Text>
+        </Text>
+        <TextInput
+          keyboardType="number-pad"
+          maxLength={4}
+          value={code}
+          onChangeText={setCode}
+          style={styles.input}
+          placeholder="0000"
+          placeholderTextColor="#64748b"
+        />
+        <TouchableOpacity style={styles.button} onPress={handleConfirm}>
+          <Text style={styles.buttonText}>Подтвердить</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  )
+}
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 24 },
-  title: { fontSize: 22, marginBottom: 12, textAlign: "center" },
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  inner: {
+    flex: 1,
+    padding: 24,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 28,
+    color: "#fff",
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#60a5fa",
+    marginBottom: 24,
+  },
+  phoneNumber: {
+    fontWeight: "bold",
+    color: "#93c5fd",
+  },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 12,
+    borderColor: "#1e3a8a",
     borderRadius: 8,
-    marginBottom: 16,
-    textAlign: "center",
+    padding: 12,
+    color: "#fff",
     fontSize: 20,
-  },
-  success: {
-    fontSize: 22,
-    color: "green",
     textAlign: "center",
+    letterSpacing: 12,
+    marginBottom: 16,
   },
-});
-
-export default CodeConfirmScreen;
+  button: {
+    backgroundColor: "#1d4ed8",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+})

@@ -13,7 +13,7 @@ import { MaskedTextInput } from "react-native-mask-text"
 import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const navigation = useNavigation()
   const [phone, setPhone] = useState("")
   const [error, setError] = useState("")
@@ -27,7 +27,7 @@ export default function LoginScreen() {
     return true
   }
 
-  const handleLogin = () => {
+  const handleRegister = () => {
     if (!validatePhone()) return
     navigation.navigate("ConfirmCode", { phone })
   }
@@ -38,7 +38,7 @@ export default function LoginScreen() {
         style={styles.inner}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <Text style={styles.title}>Вход</Text>
+        <Text style={styles.title}>Регистрация</Text>
         <MaskedTextInput
           mask="+7 (999) 999-99-99"
           keyboardType="phone-pad"
@@ -49,14 +49,14 @@ export default function LoginScreen() {
           style={styles.input}
         />
         {error ? <Text style={styles.error}>{error}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Войти</Text>
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Продолжить</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Login")}
           style={styles.linkContainer}
         >
-          <Text style={styles.linkText}>Нет аккаунта? Зарегистрироваться</Text>
+          <Text style={styles.linkText}>Уже есть аккаунт? Войти</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
