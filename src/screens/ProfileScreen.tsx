@@ -1,23 +1,67 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { useEffect, useState } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import api from "../services/api"
 import Card from "../components/Card"
 import ProgressBar from "../components/ProgressBar"
+import { useNavigation } from "@react-navigation/native"
 
 const ProfileScreen = () => {
+  const [profile, setProfile] = useState(null)
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token")
+        const res = await api.get("profile/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        setProfile(res.data)
+      } catch (err) {
+        console.error("Ошибка загрузки профиля", err)
+      }
+    }
+
+    loadProfile()
+  }, [])
+
+  const handleSignOut = async () => {
+    await AsyncStorage.clear()
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    })
+  }
+
+  const fullName = `${profile?.first_name || "Имя"} ${profile?.last_name || "Фамилия"}`
+  const beans = profile?.beans ?? 0
+  const avatarUri = profile?.avatar
+    ? `http://192.168.1.110:8456${profile.avatar}`
+    : null
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <Feather name="coffee" size={40} color="#93c5fd" />
+            {avatarUri ? (
+              <Image source={{ uri: avatarUri }} style={styles.avatarImage} />
+            ) : (
+              <Feather name="coffee" size={40} color="#93c5fd" />
+            )}
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Alex Johnson</Text>
+            <Text style={styles.profileName}>{fullName}</Text>
             <Text style={styles.profileSubtitle}>Coffee Enthusiast</Text>
             <View style={styles.beansContainer}>
               <Feather name="coffee" size={16} color="#93c5fd" style={styles.beansIcon} />
-              <Text style={styles.beansCount}>2,450</Text>
+              <Text style={styles.beansCount}>{beans}</Text>
               <Text style={styles.beansLabel}>beans</Text>
             </View>
           </View>
@@ -77,7 +121,10 @@ const ProfileScreen = () => {
 
         <Text style={styles.sectionTitle}>Preferences</Text>
         <Card>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => navigation.navigate("EditProfile")}
+          >
             <View style={styles.menuItemLeft}>
               <Feather name="settings" size={20} color="#60a5fa" style={styles.menuIcon} />
               <Text style={styles.menuText}>Settings</Text>
@@ -86,7 +133,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </Card>
 
-        <TouchableOpacity style={styles.signOutButton}>
+        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -114,6 +161,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
+    overflow: "hidden",
+  },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
   },
   profileInfo: {
     justifyContent: "center",

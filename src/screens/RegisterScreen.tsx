@@ -12,6 +12,8 @@ import {
 import { MaskedTextInput } from "react-native-mask-text"
 import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { registerUser } from '../services/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function RegisterScreen() {
   const navigation = useNavigation()
@@ -27,9 +29,17 @@ export default function RegisterScreen() {
     return true
   }
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!validatePhone()) return
-    navigation.navigate("ConfirmCode", { phone })
+    try {
+      const { access, refresh } = await registerUser(phone)
+      await AsyncStorage.setItem("token", access)
+      await AsyncStorage.setItem("refresh_token", refresh)
+      navigation.navigate("Tabs")
+    } catch (err) {
+      console.error("Ошибка регистрации:", err)
+      setError("Ошибка на сервере")
+    }
   }
 
   return (

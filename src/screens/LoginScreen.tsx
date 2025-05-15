@@ -12,6 +12,8 @@ import {
 import { MaskedTextInput } from "react-native-mask-text"
 import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { loginUser } from '../services/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function LoginScreen() {
   const navigation = useNavigation()
@@ -27,9 +29,16 @@ export default function LoginScreen() {
     return true
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!validatePhone()) return
-    navigation.navigate("ConfirmCode", { phone })
+    try {
+      const { access } = await loginUser(phone)
+      await AsyncStorage.setItem("token", access)
+      navigation.navigate('Tabs')
+    } catch (err) {
+      console.error('Ошибка логина:', err)
+      setError('Пользователь не найден')
+    }
   }
 
   return (
