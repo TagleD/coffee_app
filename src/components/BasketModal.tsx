@@ -2,6 +2,8 @@ import type React from "react"
 import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import { useBasket } from "../context/BasketContext"
+import { useNavigation } from "@react-navigation/native"
+
 
 interface BasketModalProps {
   visible: boolean
@@ -10,11 +12,11 @@ interface BasketModalProps {
 
 const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
   const { items, removeFromBasket, clearBasket, totalItems, subtotal } = useBasket()
+  const navigation = useNavigation()
 
   const handleCheckout = () => {
-    // Handle checkout logic
-    alert("Proceeding to checkout!")
-    onClose()
+    onClose() // Закрываем модалку
+    navigation.navigate("Payment") // 👉 Переход на экран оплаты
   }
 
   const total = subtotal
