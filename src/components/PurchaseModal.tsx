@@ -1,108 +1,109 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native"
+import React, { useState } from "react"
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from "react-native"
 import { Feather } from "@expo/vector-icons"
 import Badge from "./Badge"
-import { useBasket, type Coffee } from "../context/BasketContext"
+import { useBasket, Coffee } from "../context/BasketContext"
+import { getFullImageUrl } from "../services/GetfullImageUri"
 
-interface PurchaseModalProps {
-  coffee: Coffee | null
+type Props = {
   visible: boolean
   onClose: () => void
+  coffee: Coffee | null
+  userBeans: number
 }
 
-const PurchaseModal: React.FC<PurchaseModalProps> = ({ coffee, visible, onClose }) => {
+const PurchaseModal = ({ visible, onClose, coffee, userBeans }: Props) => {
   const [quantity, setQuantity] = useState(1)
-  const { addToBasket } = useBasket()
+  const { items, addToBasket } = useBasket()
 
   if (!coffee) return null
 
-  const increaseQuantity = () => setQuantity((prev) => prev + 1)
-  const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
+  const beansUsed = items.reduce(
+    (acc, item) => acc + (item.bean_price || 0) * item.quantity,
+    0
+  )
 
-  const handleAddToBasket = () => {
-    addToBasket(coffee, quantity)
-    onClose()
-    setQuantity(1) // Reset quantity when modal closes
-  }
+  const totalBeansNeeded = (coffee.bean_price || 0) * quantity
+  const enoughBeans = userBeans - beansUsed >= totalBeansNeeded
 
-  const canPayWithBeans = true // This would be determined by user's bean balance
+  const handleAddToBasketMoney = () => {
+    if (!coffee) return;
+    addToBasket(coffee, quantity); // ✅ теперь компилятор не ругается
+    onClose();
+  };
+  
+  const handleAddToBasketBeans = () => {
+    if (!coffee || !enoughBeans) return;
+    const freeCoffee = { ...coffee, price: 0 };
+    addToBasket(freeCoffee, quantity);
+    onClose();
+  };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
-      <View style={styles.centeredView}>
+    <Modal visible={visible} transparent animationType="fade">
+      <View style={styles.overlay}>
         <View style={styles.modalView}>
           <View style={styles.header}>
             <Text style={styles.title}>{coffee.name}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity onPress={onClose}>
               <Feather name="x" size={20} color="#60a5fa" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.subtitle}>Select quantity and payment method</Text>
 
-          <View style={styles.coffeeDetails}>
-            <Image source={{ uri: coffee.image || "https://via.placeholder.com/80" }} style={styles.image} />
-            <View style={styles.detailsContent}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tagsContainer}>
-                {coffee.tags.map((tag, index) => (
-                  <Badge key={index} label={tag} />
-                ))}
-              </ScrollView>
-              <Text style={styles.description}>{coffee.description}</Text>
-              <View style={styles.priceContainer}>
-                <Feather name="dollar-sign" size={16} color="#60a5fa" />
-                <Text style={styles.price}>${coffee.price.toFixed(2)}</Text>
-                <Text style={styles.separator}>|</Text>
-                <Feather name="coffee" size={16} color="#60a5fa" />
-                <Text style={styles.beans}>{coffee.beanPoints} beans</Text>
-              </View>
-            </View>
+          <Text style={styles.subtitle}>Выберите количество и способ оплаты</Text>
+
+          <Image source={{ uri: getFullImageUrl(coffee.image) }} style={styles.image} />
+          <Text style={styles.description}>{coffee.description}</Text>
+
+          <View style={styles.badgeRow}>
+            {coffee.tags.map((tag, idx) => (
+            <Badge key={idx} label={tag.name} />
+          ))}
           </View>
 
-          <View style={styles.quantitySection}>
-            <View style={styles.quantityRow}>
-              <Text style={styles.quantityLabel}>Quantity</Text>
-              <View style={styles.quantityControls}>
-                <TouchableOpacity
-                  style={[styles.quantityButton, quantity <= 1 && styles.quantityButtonDisabled]}
-                  onPress={decreaseQuantity}
-                  disabled={quantity <= 1}
-                >
-                  <Text style={styles.quantityButtonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.quantityValue}>{quantity}</Text>
-                <TouchableOpacity style={styles.quantityButton} onPress={increaseQuantity}>
-                  <Text style={styles.quantityButtonText}>+</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+          <Text style={styles.price}>
+            {coffee.price}тг. | {coffee.bean_price} beans
+          </Text>
 
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total:</Text>
-              <View>
-                <Text style={styles.totalPrice}>${(coffee.price * quantity).toFixed(2)}</Text>
-                <Text style={styles.earnBeans}>Earn {coffee.beanPoints * quantity} beans</Text>
-              </View>
-            </View>
+          <View style={styles.quantityRow}>
+            <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))}>
+              <Text style={styles.control}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantity}>{quantity}</Text>
+            <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
+              <Text style={styles.control}>+</Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.moneyButton} onPress={handleAddToBasket}>
-              <Feather name="dollar-sign" size={16} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Pay with Money</Text>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity style={styles.moneyButton} onPress={handleAddToBasketMoney}>
+              <Text style={styles.buttonText}>Оплатить за тенге</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.beansButton, !canPayWithBeans && styles.disabledButton]}
-              onPress={handleAddToBasket}
-              disabled={!canPayWithBeans}
+              style={[styles.beanButton, !enoughBeans && styles.disabledButton]}
+              onPress={handleAddToBasketBeans}
+              disabled={!enoughBeans}
             >
-              <Feather name="coffee" size={16} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Pay with Beans</Text>
+              <Text style={styles.buttonText}>Оплатить beans</Text>
             </TouchableOpacity>
           </View>
+
+          {!enoughBeans && (
+            <Text style={styles.warning}>
+              Недостаточно beans. Нужно {totalBeansNeeded}, у вас осталось {userBeans - beansUsed}.
+            </Text>
+          )}
         </View>
       </View>
     </Modal>
@@ -110,169 +111,109 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({ coffee, visible, onClose 
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
+  overlay: {
     flex: 1,
+    backgroundColor: "rgba(0,0,0,0.8)",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
-    width: "90%",
-    maxHeight: "80%",
     backgroundColor: "#000",
-    borderRadius: 12,
+    width: "90%",
     padding: 20,
-    borderWidth: 1,
+    borderRadius: 12,
     borderColor: "#1e3a8a",
+    borderWidth: 1,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
     color: "#fff",
+    fontWeight: "bold",
   },
   subtitle: {
     fontSize: 14,
     color: "#60a5fa",
-    marginBottom: 16,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  coffeeDetails: {
-    flexDirection: "row",
-    marginVertical: 16,
+    marginBottom: 10,
+    marginTop: 4,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 12,
+    marginBottom: 16,
     backgroundColor: "rgba(30, 58, 138, 0.3)",
   },
-  detailsContent: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  tagsContainer: {
-    flexDirection: "row",
-    marginBottom: 8,
-  },
   description: {
-    fontSize: 14,
     color: "#93c5fd",
-    marginBottom: 8,
+    fontSize: 14,
+    marginBottom: 10,
   },
-  priceContainer: {
+  badgeRow: {
     flexDirection: "row",
-    alignItems: "center",
+    gap: 6,
+    flexWrap: "wrap",
+    marginBottom: 8,
   },
   price: {
+    color: "#fff",
     fontWeight: "bold",
-    color: "#fff",
-    marginLeft: 4,
-  },
-  separator: {
-    color: "#2563eb",
-    marginHorizontal: 8,
-  },
-  beans: {
-    color: "#fff",
-    marginLeft: 4,
-  },
-  quantitySection: {
-    backgroundColor: "rgba(23, 37, 84, 0.2)",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
+    marginBottom: 10,
   },
   quantityRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  quantityLabel: {
-    color: "#93c5fd",
-  },
-  quantityControls: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  quantityButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#1e40af",
     justifyContent: "center",
     alignItems: "center",
+    gap: 20,
+    marginBottom: 16,
   },
-  quantityButtonDisabled: {
-    opacity: 0.5,
-  },
-  quantityButtonText: {
-    color: "#93c5fd",
-    fontSize: 16,
-  },
-  quantityValue: {
-    color: "#fff",
-    fontWeight: "500",
-    width: 24,
+  control: {
+    fontSize: 20,
+    color: "#60a5fa",
+    width: 32,
+    height: 32,
     textAlign: "center",
-    marginHorizontal: 8,
+    borderWidth: 1,
+    borderColor: "#1e3a8a",
+    borderRadius: 8,
+    lineHeight: 32,
   },
-  totalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  totalLabel: {
-    color: "#93c5fd",
-    fontSize: 14,
-  },
-  totalPrice: {
+  quantity: {
+    fontSize: 18,
     color: "#fff",
     fontWeight: "bold",
-    textAlign: "right",
   },
-  earnBeans: {
-    color: "#60a5fa",
-    fontSize: 12,
-    textAlign: "right",
-  },
-  buttonContainer: {
-    marginTop: 8,
+  buttonRow: {
+    gap: 10,
   },
   moneyButton: {
     backgroundColor: "#1d4ed8",
-    borderRadius: 8,
     padding: 12,
-    flexDirection: "row",
-    justifyContent: "center",
+    borderRadius: 8,
     alignItems: "center",
-    marginBottom: 8,
   },
-  beansButton: {
+  beanButton: {
     backgroundColor: "#1e3a8a",
-    borderRadius: 8,
     padding: 12,
-    flexDirection: "row",
-    justifyContent: "center",
+    borderRadius: 8,
     alignItems: "center",
-  },
-  disabledButton: {
-    opacity: 0.5,
   },
   buttonText: {
     color: "#fff",
     fontWeight: "500",
   },
-  buttonIcon: {
-    marginRight: 8,
+  disabledButton: {
+    opacity: 0.5,
+  },
+  warning: {
+    color: "#f87171",
+    fontSize: 13,
+    textAlign: "center",
+    marginTop: 10,
   },
 })
 

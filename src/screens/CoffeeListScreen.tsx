@@ -1,84 +1,136 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput } from "react-native"
-import { Feather } from "@expo/vector-icons"
-import { SafeAreaView } from "react-native-safe-area-context"
-import Card from "../components/Card"
-import Badge from "../components/Badge"
-import PurchaseModal from "../components/PurchaseModal"
-import BasketModal from "../components/BasketModal"
-import { useBasket, type Coffee } from "../context/BasketContext"
+import { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  TextInput,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Card from "../components/Card";
+import Badge from "../components/Badge";
+import PurchaseModal from "../components/PurchaseModal";
+import BasketModal from "../components/BasketModal";
+import { getFullImageUrl } from "../services/GetfullImageUri";
+import { useBasket } from "../context/BasketContext";
+import { useUser } from "../context/UserContext" // добавь импорт
+import api from "../services/api";
 
-const coffees: Coffee[] = [
-  {
-    id: 1,
-    name: "Ethiopian Yirgacheffe",
-    description: "Floral and citrus notes with a light body",
-    price: 18.99,
-    beanPoints: 190,
-    image: "https://via.placeholder.com/80",
-    tags: ["Light Roast", "Floral"],
-  },
-  {
-    id: 2,
-    name: "Colombian Supremo",
-    description: "Sweet caramel and nutty flavors with medium acidity",
-    price: 16.5,
-    beanPoints: 165,
-    image: "https://via.placeholder.com/80",
-    tags: ["Medium Roast", "Nutty"],
-  },
-  {
-    id: 3,
-    name: "Sumatra Mandheling",
-    description: "Earthy, full-bodied with low acidity and chocolate notes",
-    price: 19.99,
-    beanPoints: 200,
-    image: "https://via.placeholder.com/80",
-    tags: ["Dark Roast", "Earthy"],
-  },
-  {
-    id: 4,
-    name: "Kenyan AA",
-    description: "Bright acidity with berry and citrus notes",
-    price: 21.5,
-    beanPoints: 215,
-    image: "https://via.placeholder.com/80",
-    tags: ["Medium Roast", "Fruity"],
-  },
-]
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  bean_price: number;
+  image: string;
+  tags: { id: number; name: string; code: string }[];
+};
+
+type Tag = {
+  id: number;
+  name: string;
+  code: string;
+};
 
 const CoffeeListScreen = () => {
-  const [selectedCoffee, setSelectedCoffee] = useState<Coffee | null>(null)
-  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false)
-  const [isBasketModalOpen, setIsBasketModalOpen] = useState(false)
-  const { totalItems } = useBasket()
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+  const [isBasketModalOpen, setIsBasketModalOpen] = useState(false);
+  const { totalItems } = useBasket();
+  const user = useUser() // добавь это
 
-  const openPurchaseModal = (coffee: Coffee) => {
-    setSelectedCoffee(coffee)
-    setIsPurchaseModalOpen(true)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+  const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    fetchFilteredProducts()
+  }, [])
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await api.get("tags/"); // 👉 должен быть доступен эндпоинт
+        setTags(res.data);
+      } catch (err) {
+        console.error("Ошибка загрузки тегов:", err);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
+  const openPurchaseModal = (product: Product) => {
+    setSelectedProduct(product);
+    setIsPurchaseModalOpen(true);
+  };
+
+  const fetchFilteredProducts = async (search = "", tagCode: string | null = null) => {
+    try {
+      const params: any = {}
+      if (search) params.search = search
+      if (tagCode) params.tag = tagCode  // ✅ теперь передаём CODE
+  
+      const res = await api.get("products/", { params })
+      setFilteredProducts(res.data)
+    } catch (err) {
+      console.error("Ошибка фильтрации:", err)
+    }
   }
+
+  const handleSearch = (text: string) => {
+    setSearchQuery(text)
+    fetchFilteredProducts(text, selectedTag?.code ?? null) // ✅ передаём code
+  }
+
+  const handleTagSelect = (tag: Tag | null) => {
+    setSelectedTag(tag);
+    setIsTagDropdownOpen(false);
+  
+    const code = tag?.code ?? null;
+    fetchFilteredProducts(searchQuery, code);
+  };
 
   const closePurchaseModal = () => {
-    setIsPurchaseModalOpen(false)
-    setSelectedCoffee(null)
-  }
+    setIsPurchaseModalOpen(false);
+    setSelectedProduct(null);
+  };
 
   const openBasketModal = () => {
-    setIsBasketModalOpen(true)
-  }
+    setIsBasketModalOpen(true);
+  };
 
   const closeBasketModal = () => {
-    setIsBasketModalOpen(false)
-  }
+    setIsBasketModalOpen(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* — Search and filters — */}
       <View style={styles.header}>
         <View style={styles.searchContainer}>
-          <Feather name="search" size={16} color="#60a5fa" style={styles.searchIcon} />
-          <TextInput style={styles.searchInput} placeholder="Search coffees..." placeholderTextColor="#60a5fa" />
+          <Feather
+            name="search"
+            size={16}
+            color="#60a5fa"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Найти любимый напиток"
+            placeholderTextColor="#60a5fa"
+            value={searchQuery}
+            onChangeText={handleSearch}
+          />
         </View>
         <TouchableOpacity style={styles.basketButton} onPress={openBasketModal}>
           <Feather name="shopping-bag" size={20} color="#60a5fa" />
@@ -88,53 +140,95 @@ const CoffeeListScreen = () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
+        >
           <Feather name="filter" size={20} color="#60a5fa" />
         </TouchableOpacity>
+        {isTagDropdownOpen && (
+          <View style={styles.dropdown}>
+            <TouchableOpacity
+              onPress={() => handleTagSelect(null)}
+              style={[styles.dropdownItem, { backgroundColor: "#1e40af" }]}
+            >
+              <Text style={[styles.dropdownText, { fontWeight: "bold" }]}>
+                Все теги
+              </Text>
+            </TouchableOpacity>
+
+            {tags.map((tag) => (
+              <TouchableOpacity
+                key={tag.id}
+                onPress={() => handleTagSelect(tag)}
+                style={styles.dropdownItem}
+              >
+                <Text style={styles.dropdownText}>{tag.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
 
+      {/* — Product list — */}
       <FlatList
-        data={coffees}
+        data={filteredProducts}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <Card>
             <View style={styles.coffeeItem}>
-              <Image source={{ uri: item.image }} style={styles.coffeeImage} />
+              <Image
+                source={{ uri: getFullImageUrl(item.image) }}
+                style={styles.coffeeImage}
+              />
               <View style={styles.coffeeDetails}>
                 <View style={styles.coffeeHeader}>
                   <Text style={styles.coffeeName}>{item.name}</Text>
-                  <Text style={styles.coffeePrice}>${item.price}</Text>
+                  <Text style={styles.coffeePrice}>{item.price} ₸</Text>
                 </View>
                 <Text style={styles.coffeeDescription} numberOfLines={2}>
                   {item.description}
                 </Text>
                 <View style={styles.coffeeFooter}>
                   <View style={styles.tagsContainer}>
-                    {item.tags.map((tag, index) => (
-                      <Badge key={index} label={tag} />
+                    {item.tags.map((tag) => (
+                      <Badge key={tag.id} label={tag.name} />
                     ))}
                   </View>
                   <View style={styles.beansContainer}>
-                    <Feather name="coffee" size={12} color="#93c5fd" style={styles.beansIcon} />
-                    <Text style={styles.beansText}>{item.beanPoints}</Text>
+                    <Feather
+                      name="coffee"
+                      size={12}
+                      color="#93c5fd"
+                      style={styles.beansIcon}
+                    />
+                    <Text style={styles.beansText}>{item.bean_price}</Text>
                   </View>
                 </View>
-                <TouchableOpacity style={styles.buyButton} onPress={() => openPurchaseModal(item)}>
-                  <Text style={styles.buyButtonText}>Buy Now</Text>
+                <TouchableOpacity
+                  style={styles.buyButton}
+                  onPress={() => openPurchaseModal(item)}
+                >
+                  <Text style={styles.buyButtonText}>Купить</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Card>
         )}
-        contentContainerStyle={styles.listContent}
       />
 
-      <PurchaseModal coffee={selectedCoffee} visible={isPurchaseModalOpen} onClose={closePurchaseModal} />
+      <PurchaseModal
+        coffee={selectedProduct}
+        visible={isPurchaseModalOpen}
+        onClose={closePurchaseModal}
+        userBeans={user?.beans ?? 0}
+      />
 
       <BasketModal visible={isBasketModalOpen} onClose={closeBasketModal} />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -274,6 +368,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
   },
-})
+  dropdown: {
+    position: "absolute",
+    top: 64,
+    right: 16,
+    backgroundColor: "#1e3a8a",
+    borderRadius: 8,
+    borderColor: "#60a5fa",
+    borderWidth: 1,
+    zIndex: 100,
+  },
 
-export default CoffeeListScreen
+  dropdownItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#1e40af",
+  },
+
+  dropdownText: {
+    color: "#fff",
+  },
+});
+
+export default CoffeeListScreen;

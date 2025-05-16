@@ -54,15 +54,15 @@ export default function BasketModal({
               <X className="h-4 w-4" />
             </Button>
           </div>
-          <DialogDescription className="text-blue-400">Review your items before checkout</DialogDescription>
+          <DialogDescription className="text-blue-400">Проверьте товары перед оформлением</DialogDescription>
         </DialogHeader>
 
         {items.length === 0 ? (
           <div className="py-8 text-center">
             <ShoppingBag className="h-12 w-12 mx-auto text-blue-900 mb-3" />
-            <p className="text-blue-400">Your basket is empty</p>
+            <p className="text-blue-400">Ваша корзина пуста</p>
             <Button variant="outline" className="mt-4 border-blue-800 text-blue-300" onClick={onClose}>
-              Continue Shopping
+            Продолжить покупки
             </Button>
           </div>
         ) : (
@@ -113,7 +113,7 @@ export default function BasketModal({
                 </div>
                 <Separator className="bg-blue-900 my-2" />
                 <div className="flex justify-between font-bold">
-                  <span className="text-white">Total</span>
+                  <span className="text-white">Итого</span>
                   <span className="text-white">${(subtotal + 3.99 + subtotal * 0.08).toFixed(2)}</span>
                 </div>
               </div>
@@ -121,11 +121,11 @@ export default function BasketModal({
 
             <DialogFooter className="flex flex-col gap-3 sm:gap-3 mt-4">
               <Button className="w-full bg-blue-700 hover:bg-blue-600 text-white" onClick={onCheckout}>
-                Proceed to Checkout
+                Перейти к оплате
               </Button>
 
               <Button variant="outline" className="w-full border-blue-800 text-blue-300" onClick={onClearBasket}>
-                Clear Basket
+                Очистить корзину
               </Button>
             </DialogFooter>
           </>

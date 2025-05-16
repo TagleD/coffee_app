@@ -17,9 +17,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
     onClose()
   }
 
-  const shipping = 3.99
-  const tax = subtotal * 0.08
-  const total = subtotal + shipping + tax
+  const total = subtotal
 
   return (
     <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
@@ -28,20 +26,20 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
           <View style={styles.header}>
             <View style={styles.titleContainer}>
               <Feather name="shopping-bag" size={20} color="#60a5fa" style={styles.titleIcon} />
-              <Text style={styles.title}>Your Basket ({totalItems})</Text>
+              <Text style={styles.title}>Ваша корзина ({totalItems})</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Feather name="x" size={20} color="#60a5fa" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.subtitle}>Review your items before checkout</Text>
+          <Text style={styles.subtitle}>Проверьте товары перед оформлением</Text>
 
           {items.length === 0 ? (
             <View style={styles.emptyBasket}>
               <Feather name="shopping-bag" size={48} color="#1e3a8a" style={styles.emptyIcon} />
-              <Text style={styles.emptyText}>Your basket is empty</Text>
+              <Text style={styles.emptyText}>Ваша корзина пуста</Text>
               <TouchableOpacity style={styles.continueButton} onPress={onClose}>
-                <Text style={styles.continueButtonText}>Continue Shopping</Text>
+                <Text style={styles.continueButtonText}>Продолжить покупки</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -68,32 +66,20 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
               />
 
               <View style={styles.summary}>
+    
                 <View style={styles.separator} />
                 <View style={styles.summaryRow}>
-                  <Text style={styles.summaryLabel}>Subtotal</Text>
-                  <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
-                </View>
-                <View style={styles.summaryRow}>
-                  <Text style={styles.summaryLabel}>Shipping</Text>
-                  <Text style={styles.summaryValue}>${shipping.toFixed(2)}</Text>
-                </View>
-                <View style={styles.summaryRow}>
-                  <Text style={styles.summaryLabel}>Tax</Text>
-                  <Text style={styles.summaryValue}>${tax.toFixed(2)}</Text>
-                </View>
-                <View style={styles.separator} />
-                <View style={styles.summaryRow}>
-                  <Text style={styles.totalLabel}>Total</Text>
+                  <Text style={styles.totalLabel}>Итого</Text>
                   <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
                 </View>
               </View>
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-                  <Text style={styles.buttonText}>Proceed to Checkout</Text>
+                  <Text style={styles.buttonText}>Перейти к оплате</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.clearButton} onPress={clearBasket}>
-                  <Text style={styles.clearButtonText}>Clear Basket</Text>
+                  <Text style={styles.clearButtonText}>Очистить корзину</Text>
                 </TouchableOpacity>
               </View>
             </>
