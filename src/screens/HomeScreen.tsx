@@ -3,8 +3,20 @@ import { Feather } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import Card from "../components/Card"
 import ProgressBar from "../components/ProgressBar"
+import { useUser } from "../context/UserContext"
 
 const HomeScreen = () => {
+  const { user } = useUser()
+
+  if (!user) return null // Защита, если профиль ещё не подгружен
+
+  const { level, next_level_beans, beans_total } = user
+
+  const currentLevel = level ?? 0
+  const nextBeans = next_level_beans ?? beans_total + 1 // Чтобы не было деления на 0
+  const progress = Math.min(100, Math.round((beans_total / nextBeans) * 100))
+  const beansToNext = nextBeans - beans_total
+
   return (
     <ImageBackground source={{ uri: "https://via.placeholder.com/1080x1920/000000/000000" }} style={styles.background}>
       <SafeAreaView style={styles.container}>
@@ -12,11 +24,11 @@ const HomeScreen = () => {
           <View style={styles.header}>
             <View>
               <Text style={styles.title}>BeanBrew</Text>
-              <Text style={styles.subtitle}>Good morning, Coffee Lover!</Text>
+              <Text style={styles.subtitle}>Доброе утро, Ценитель Кофе!</Text>
             </View>
             <View style={styles.beansContainer}>
               <Feather name="coffee" size={16} color="#93c5fd" style={styles.beansIcon} />
-              <Text style={styles.beansText}>2,450</Text>
+              <Text style={styles.beansText}><Text style={styles.beansText}>{user?.beans ?? 0}</Text></Text>
             </View>
           </View>
 
@@ -24,10 +36,10 @@ const HomeScreen = () => {
             <View style={styles.cardContent}>
               <View style={styles.levelHeader}>
                 <Text style={styles.levelTitle}>Bean Level</Text>
-                <Text style={styles.levelValue}>Level 7</Text>
+                <Text style={styles.levelValue}>Level {currentLevel}</Text>
               </View>
-              <ProgressBar value={65} />
-              <Text style={styles.levelInfo}>Earn 550 more beans to reach Level 8</Text>
+              <ProgressBar value={progress} />
+              <Text style={styles.levelInfo}>Заработой еще {beansToNext} beans чтобы достичь {currentLevel + 1} уровня</Text>
             </View>
           </Card>
 

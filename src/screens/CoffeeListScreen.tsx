@@ -222,7 +222,7 @@ const CoffeeListScreen = () => {
         coffee={selectedProduct}
         visible={isPurchaseModalOpen}
         onClose={closePurchaseModal}
-        userBeans={user?.beans ?? 0}
+        userBeans={user?.user?.beans ?? 0}
       />
 
       <BasketModal visible={isBasketModalOpen} onClose={closeBasketModal} />

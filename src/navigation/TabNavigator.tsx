@@ -17,16 +17,16 @@ export default function TabNavigator() {
         tabBarStyle: { backgroundColor: "#0f172a", borderTopWidth: 0 },
         tabBarIcon: ({ color, size }) => {
           let iconName: keyof typeof Feather.glyphMap = "home";
-          if (route.name === "Home") iconName = "home";
-          if (route.name === "Coffee") iconName = "coffee";
-          if (route.name === "Profile") iconName = "user";
+          if (route.name === "Домой") iconName = "home";
+          if (route.name === "Кофе") iconName = "coffee";
+          if (route.name === "Профиль") iconName = "user";
           return <Feather name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Coffee" component={CoffeeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Домой" component={HomeScreen} />
+      <Tab.Screen name="Кофе" component={CoffeeScreen} />
+      <Tab.Screen name="Профиль" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

@@ -14,11 +14,15 @@ import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { loginUser } from '../services/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useUser } from "../context/UserContext" // добавляем
+import api from "../services/api"
 
 export default function LoginScreen() {
   const navigation = useNavigation()
   const [phone, setPhone] = useState("")
   const [error, setError] = useState("")
+
+  const { setUser } = useUser() // внутри компонента
 
   const validatePhone = () => {
     const digitsOnly = phone.replace(/\D/g, "")
@@ -32,12 +36,20 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     if (!validatePhone()) return
     try {
-      const { access } = await loginUser(phone)
-      await AsyncStorage.setItem("token", access)
-      navigation.navigate('Tabs')
+      const res = await loginUser(phone)
+      await AsyncStorage.setItem("token", res.access)
+      await AsyncStorage.setItem("refresh_token", res.refresh)
+  
+      // ⬇️ Загружаем профиль
+      const profile = await api.get("profile/", {
+        headers: { Authorization: `Bearer ${res.access}` },
+      })
+      setUser(profile.data)
+  
+      navigation.navigate("Tabs")
     } catch (err) {
-      console.error('Ошибка логина:', err)
-      setError('Пользователь не найден')
+      console.error("Ошибка логина:", err)
+      setError("Пользователь не найден")
     }
   }
 
