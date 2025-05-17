@@ -57,7 +57,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
                       <Text style={styles.itemName}>{item.name}</Text>
                       <View style={styles.itemMeta}>
                         <Text style={styles.itemQuantity}>Qty: {item.quantity}</Text>
-                        <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
+                        <Text style={styles.itemPrice}>{(item.price * item.quantity).toFixed(2)} тг.</Text>
                       </View>
                     </View>
                     <TouchableOpacity style={styles.removeButton} onPress={() => removeFromBasket(item.id)}>
@@ -72,7 +72,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
                 <View style={styles.separator} />
                 <View style={styles.summaryRow}>
                   <Text style={styles.totalLabel}>Итого</Text>
-                  <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
+                  <Text style={styles.totalValue}>{total.toFixed(2)} тг.</Text>
                 </View>
               </View>
 

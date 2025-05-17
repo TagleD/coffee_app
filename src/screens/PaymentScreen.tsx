@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useBasket } from "../context/BasketContext"
+import { useUser } from "../context/UserContext"
 import api from "../services/api"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -20,6 +21,7 @@ const FakePaymentScreen = ({ navigation }: any) => {
   const [cvc, setCvc] = useState("");
   const [loading, setLoading] = useState(false);
   const { items, clearBasket } = useBasket();
+  const { fetchAndSetUser } = useUser()
 
   const formatCardNumber = (value: string) => {
     return value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
@@ -67,6 +69,8 @@ const FakePaymentScreen = ({ navigation }: any) => {
         })
 
       clearBasket();
+      await fetchAndSetUser(); // ✅ обновить профиль с новыми beans
+
       Alert.alert("Успех", `Заказ #${res.data.order_id} оформлен. Начислено ${res.data.beans_earned} beans`);
       navigation.navigate("Tabs");
     } catch (err) {
