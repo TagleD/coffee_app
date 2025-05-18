@@ -5,7 +5,6 @@ import { useUser } from "../context/UserContext"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../services/api"
 
-
 export default function DailySpinScreen() {
   const { fetchAndSetUser } = useUser()
   const [spinning, setSpinning] = useState(false)
@@ -14,15 +13,15 @@ export default function DailySpinScreen() {
 
   const spin = async () => {
     setSpinning(true)
-  
+
     try {
       const token = await AsyncStorage.getItem("token")
       const res = await api.post("/daily_spin/", {}, {
         headers: { Authorization: `Bearer ${token}` },
       })
-  
+
       const won = res.data.beans_won
-  
+
       const rewardSectors = [
         { value: 500, start: 337.5, end: 22.5 },
         { value: 100, start: 22.6, end: 67.5 },
@@ -33,21 +32,22 @@ export default function DailySpinScreen() {
         { value: 1000,start: 247.6, end: 292.5 },
         { value: 200, start: 292.6, end: 337.5 },
       ]
-  
-      // Получаем сектор
+
       const sectors = rewardSectors.filter(s => s.value === won)
-      const selectedSector = sectors.length > 1 ? sectors[Math.floor(Math.random() * sectors.length)] : sectors[0]
-  
+      const selectedSector = sectors.length > 1
+        ? sectors[Math.floor(Math.random() * sectors.length)]
+        : sectors[0]
+
       const start = selectedSector.start
       const end = selectedSector.end
       const baseAngle = start > end
         ? ((start + (360 + end)) / 2) % 360
         : (start + end) / 2
-  
+
       const corrected = (baseAngle - 90 + 360) % 360
       const rounds = 5
       const targetAngle = 360 * rounds + corrected
-  
+
       Animated.timing(spinAnim, {
         toValue: targetAngle,
         duration: 3000,
@@ -59,7 +59,7 @@ export default function DailySpinScreen() {
         setDisabled(true)
         setSpinning(false)
       })
-  
+
     } catch (err: any) {
       Alert.alert("Ошибка", err?.response?.data?.detail || "Ошибка прокрутки")
       setSpinning(false)
@@ -80,17 +80,14 @@ export default function DailySpinScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.subtitle}>Выиграй до 1000 beans!</Text>
       <Text style={styles.title}>Ежедневное колесо удачи</Text>
       <View style={styles.wheelWrapper}>
-        {/* Стрелка — НЕ вращается */}
         <View style={styles.pointer} />
-
-            {/* Само вращающееся колесо */}
-            <Animated.View style={[styles.wheel, rotateStyle]}>
-  <Image source={require("../../assets/spin.png")} style={styles.image} />
-</Animated.View>
-        </View>
-
+        <Animated.View style={[styles.wheel, rotateStyle]}>
+          <Image source={require("../../assets/spin.png")} style={styles.image} />
+        </Animated.View>
+      </View>
       <TouchableOpacity
         style={[styles.button, disabled && styles.disabled]}
         onPress={spin}
@@ -103,18 +100,33 @@ export default function DailySpinScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#000" },
-  title: { fontSize: 22, color: "#fff", marginBottom: 24 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0f172a",
+    paddingHorizontal: 24,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#93c5fd",
+    fontWeight: "600",
+    marginBottom: 6,
+  },
+  title: {
+    fontSize: 28,
+    color: "#fff",
+    fontWeight: "bold",
+    marginBottom: 24,
+    textAlign: "center",
+  },
   wheel: {
     width: 250,
     height: 250,
     borderRadius: 125,
-    borderWidth: 4,
-    borderColor: "#1e3a8a",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 32,
-    backgroundColor: "#1e40af",
+    backgroundColor: "#1e3a8a",
   },
   wheelWrapper: {
     width: 250,
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
   },
   pointer: {
     position: "absolute",
-    top: -10, // теперь внизу
+    top: -10,
     width: 0,
     height: 0,
     borderLeftWidth: 10,
@@ -133,27 +145,25 @@ const styles = StyleSheet.create({
     borderTopWidth: 20,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
-    borderTopColor: "#60a5fa", // светло-синий
+    borderTopColor: "#60a5fa",
     zIndex: 10,
   },
-  sector: {
-    position: "absolute",
-  },
-  sectorText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
   image: {
-    position: "absolute",
     width: 250,
     height: 250,
     borderRadius: 125,
+    position: "absolute",
   },
   button: {
-    backgroundColor: "#1d4ed8",
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: "#2563eb",
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   disabled: {
     opacity: 0.4,
