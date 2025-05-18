@@ -14,41 +14,40 @@ export default function DailySpinScreen() {
 
   const spin = async () => {
     setSpinning(true)
-
+  
     try {
       const token = await AsyncStorage.getItem("token")
       const res = await api.post("/daily_spin/", {}, {
         headers: { Authorization: `Bearer ${token}` },
       })
-
+  
       const won = res.data.beans_won
-
-      // Рандомная позиция, приближенная к выигранному сектору
+  
       const rewardSectors = [
         { value: 500, start: 337.5, end: 22.5 },
         { value: 100, start: 22.6, end: 67.5 },
-        { value: 50, start: 67.6, end: 112.5 },
+        { value: 50,  start: 67.6, end: 112.5 },
         { value: 200, start: 112.6, end: 157.5 },
         { value: 300, start: 157.6, end: 202.5 },
         { value: 300, start: 202.6, end: 247.5 },
-        { value: 1000, start: 247.6, end: 292.5 },
+        { value: 1000,start: 247.6, end: 292.5 },
         { value: 200, start: 292.6, end: 337.5 },
       ]
-
-      const matchingSector = rewardSectors.find(
-        s => s.value === won
-      )
-      
-      // Вращаем в центр нужного сектора
-      const rounds = 5
-      const { start, end } = matchingSector!
-        const centerAngle = (start > end)
+  
+      // Получаем сектор
+      const sectors = rewardSectors.filter(s => s.value === won)
+      const selectedSector = sectors.length > 1 ? sectors[Math.floor(Math.random() * sectors.length)] : sectors[0]
+  
+      const start = selectedSector.start
+      const end = selectedSector.end
+      const baseAngle = start > end
         ? ((start + (360 + end)) / 2) % 360
         : (start + end) / 2
-
-        const normalizedAngle = (90 - centerAngle + 360) % 360
-        const targetAngle = 360 * rounds + normalizedAngle
-
+  
+      const corrected = (baseAngle - 90 + 360) % 360
+      const rounds = 5
+      const targetAngle = 360 * rounds + corrected
+  
       Animated.timing(spinAnim, {
         toValue: targetAngle,
         duration: 3000,
@@ -60,17 +59,24 @@ export default function DailySpinScreen() {
         setDisabled(true)
         setSpinning(false)
       })
+  
     } catch (err: any) {
       Alert.alert("Ошибка", err?.response?.data?.detail || "Ошибка прокрутки")
       setSpinning(false)
     }
   }
 
-  const rotation = spinAnim.interpolate({
-    inputRange: [0, 360],
-    outputRange: ['0deg', '360deg'],
-    extrapolate: 'extend', // важно!
-  })
+  const rotateStyle = {
+    transform: [
+      {
+        rotate: spinAnim.interpolate({
+          inputRange: [0, 360 * 10],
+          outputRange: ['0deg', `${360 * 10}deg`],
+          extrapolate: 'clamp',
+        }),
+      },
+    ],
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,9 +86,9 @@ export default function DailySpinScreen() {
         <View style={styles.pointer} />
 
             {/* Само вращающееся колесо */}
-            <Animated.View style={[styles.wheel, { transform: [{ rotate: rotation }] }]}>
-                <Image source={require("../../assets/spin.png")} style={styles.image} />
-            </Animated.View>
+            <Animated.View style={[styles.wheel, rotateStyle]}>
+  <Image source={require("../../assets/spin.png")} style={styles.image} />
+</Animated.View>
         </View>
 
       <TouchableOpacity
