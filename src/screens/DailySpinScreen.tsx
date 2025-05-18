@@ -69,6 +69,7 @@ export default function DailySpinScreen() {
   const rotation = spinAnim.interpolate({
     inputRange: [0, 360],
     outputRange: ['0deg', '360deg'],
+    extrapolate: 'extend', // важно!
   })
 
   return (
@@ -116,10 +117,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 32,
   },
-  
   pointer: {
     position: "absolute",
-    top: 0, // теперь внизу
+    top: -10, // теперь внизу
     width: 0,
     height: 0,
     borderLeftWidth: 10,
