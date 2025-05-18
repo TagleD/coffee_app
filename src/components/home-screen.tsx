@@ -2,8 +2,11 @@ import { Bean, Gift, Trophy } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
 
 export default function HomeScreen() {
+  const navigate = useNavigate()
+
   return (
     <div className="flex flex-col h-full p-4 space-y-6 bg-gradient-to-b from-black to-blue-950">
       <header className="flex justify-between items-center">
@@ -48,7 +51,12 @@ export default function HomeScreen() {
               </div>
               <h3 className="text-sm font-medium text-white">Daily Spin</h3>
               <p className="text-xs text-blue-300 mt-1">Up to 500 beans</p>
-              <Button className="mt-2 w-full bg-blue-700 hover:bg-blue-600">Spin</Button>
+              <Button
+                className="mt-2 w-full bg-blue-700 hover:bg-blue-600"
+                onClick={() => navigate("/daily-spin")}
+              >
+                Spin
+              </Button>
             </CardContent>
           </Card>
         </div>

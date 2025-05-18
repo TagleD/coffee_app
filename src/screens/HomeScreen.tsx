@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import Card from "../components/Card"
 import ProgressBar from "../components/ProgressBar"
 import { useUser } from "../context/UserContext"
+import { useNavigation } from "@react-navigation/native"
 
 const HomeScreen = () => {
   const { user } = useUser()
@@ -16,6 +17,7 @@ const HomeScreen = () => {
   const nextBeans = next_level_beans ?? beans_total + 1 // Чтобы не было деления на 0
   const progress = Math.min(100, Math.round((beans_total / nextBeans) * 100))
   const beansToNext = nextBeans - beans_total
+  const navigation = useNavigation()
 
   return (
     <ImageBackground source={{ uri: "https://via.placeholder.com/1080x1920/000000/000000" }} style={styles.background}>
@@ -65,7 +67,10 @@ const HomeScreen = () => {
                 </View>
                 <Text style={styles.gameTitle}>Daily Spin</Text>
                 <Text style={styles.gameReward}>Up to 500 beans</Text>
-                <TouchableOpacity style={styles.gameButton}>
+                <TouchableOpacity
+                  style={styles.gameButton}
+                  onPress={() => navigation.navigate("DailySpin")}
+                >
                   <Text style={styles.gameButtonText}>Spin</Text>
                 </TouchableOpacity>
               </View>

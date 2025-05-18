@@ -9,6 +9,7 @@ import HomeScreen from "../screens/HomeScreen"
 import TabNavigator from "./TabNavigator"
 import { navigationRef } from "../services/RootNavigation" 
 import PaymentScreen from "../screens/PaymentScreen"
+import DailySpinScreen from "../screens/DailySpinScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -23,6 +24,7 @@ export default function RootNavigator({ initialRoute = "Login" }) {
         <Stack.Screen name="Tabs" component={TabNavigator} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ title: "Edit Profile" }} />
         <Stack.Screen name="Payment" component={PaymentScreen} />
+        <Stack.Screen name="DailySpin" component={DailySpinScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
