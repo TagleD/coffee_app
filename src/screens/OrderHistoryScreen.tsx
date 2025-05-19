@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-nat
 import { SafeAreaView } from "react-native-safe-area-context"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../services/api"
-import OrderCard from "../components/OrderCard"
+import OrderHistoryItem from "../components/OrderHistoryItem"
 
 type Product = {
   id: number
@@ -52,7 +52,7 @@ export default function OrderHistoryScreen() {
         {orders.length === 0 ? (
           <Text style={styles.empty}>Нет заказов</Text>
         ) : (
-          orders.map((order) => <OrderCard key={order.id} order={order} />)
+          orders.map((order) => <OrderHistoryItem key={order.id} order={order} />)
         )}
       </ScrollView>
     </SafeAreaView>
@@ -60,21 +60,22 @@ export default function OrderHistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  title: {
-    fontSize: 22,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  empty: {
-    color: "#60a5fa",
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 32,
-  },
-})
+    container: {
+      flex: 1,
+      backgroundColor: "#000",
+    },
+    title: {
+      fontSize: 20,
+      color: "#93c5fd",
+      fontWeight: "600",
+      marginBottom: 12,
+    },
+    empty: {
+      color: "#60a5fa",
+      fontSize: 16,
+      textAlign: "center",
+      marginTop: 32,
+    },
+  })
+  
 

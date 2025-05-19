@@ -1,4 +1,3 @@
-import type React from "react"
 import type { ReactNode } from "react"
 import { View, StyleSheet, type ViewStyle } from "react-native"
 
@@ -7,7 +6,7 @@ interface CardProps {
   style?: ViewStyle
 }
 
-const Card: React.FC<CardProps> = ({ children, style }) => {
+const Card = ({ children, style }: CardProps) => {
   return <View style={[styles.card, style]}>{children}</View>
 }
 

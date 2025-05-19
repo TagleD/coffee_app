@@ -8,6 +8,7 @@ import api from "../services/api"
 import Card from "../components/Card"
 import ProgressBar from "../components/ProgressBar"
 import { useNavigation } from "@react-navigation/native"
+import { getFullImageUrl } from "../services/GetfullImageUri"
 
 const ProfileScreen = () => {
   const [profile, setProfile] = useState(null)
@@ -41,9 +42,8 @@ const ProfileScreen = () => {
 
   const fullName = `${profile?.first_name || "Имя"} ${profile?.last_name || "Фамилия"}`
   const beans = profile?.beans ?? 0
-  const avatarUri = profile?.avatar
-    ? `http://192.168.1.110:8456${profile.avatar}`
-    : null
+  const avatarUri = getFullImageUrl(profile?.avatar || "")
+
 
   return (
     <SafeAreaView style={styles.container}>

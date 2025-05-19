@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -9,48 +9,48 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-} from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "../components/Card";
-import Badge from "../components/Badge";
-import PurchaseModal from "../components/PurchaseModal";
-import BasketModal from "../components/BasketModal";
-import { getFullImageUrl } from "../services/GetfullImageUri";
-import { useBasket } from "../context/BasketContext";
-import { useUser } from "../context/UserContext" // добавь импорт
-import api from "../services/api";
+} from "react-native"
+import { Feather } from "@expo/vector-icons"
+import { SafeAreaView } from "react-native-safe-area-context"
+import Card from "../components/Card"
+import Badge from "../components/Badge"
+import PurchaseModal from "../components/PurchaseModal"
+import BasketModal from "../components/BasketModal"
+import { getFullImageUrl } from "../services/GetfullImageUri"
+import { useBasket } from "../context/BasketContext"
+import { useUser } from "../context/UserContext"
+import api from "../services/api"
 
 type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  bean_price: number;
-  image: string;
-  tags: { id: number; name: string; code: string }[];
-};
+  id: number
+  name: string
+  description: string
+  price: number
+  bean_price: number
+  image: string
+  tags: { id: number; name: string; code: string }[]
+}
 
 type Tag = {
-  id: number;
-  name: string;
-  code: string;
-};
+  id: number
+  name: string
+  code: string
+}
 
 const CoffeeListScreen = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
-  const [isBasketModalOpen, setIsBasketModalOpen] = useState(false);
-  const { totalItems } = useBasket();
-  const user = useUser() // добавь это
+  const [products, setProducts] = useState<Product[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false)
+  const [isBasketModalOpen, setIsBasketModalOpen] = useState(false)
+  const { totalItems } = useBasket()
+  const user = useUser()
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
 
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
-  const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
+  const [tags, setTags] = useState<Tag[]>([])
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null)
+  const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false)
 
   useEffect(() => {
     fetchFilteredProducts()
@@ -59,27 +59,22 @@ const CoffeeListScreen = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const res = await api.get("tags/"); // 👉 должен быть доступен эндпоинт
-        setTags(res.data);
+        const res = await api.get("tags/")
+        setTags(res.data)
       } catch (err) {
-        console.error("Ошибка загрузки тегов:", err);
+        console.error("Ошибка загрузки тегов:", err)
       }
-    };
+    }
 
-    fetchTags();
-  }, []);
-
-  const openPurchaseModal = (product: Product) => {
-    setSelectedProduct(product);
-    setIsPurchaseModalOpen(true);
-  };
+    fetchTags()
+  }, [])
 
   const fetchFilteredProducts = async (search = "", tagCode: string | null = null) => {
     try {
       const params: any = {}
       if (search) params.search = search
-      if (tagCode) params.tag = tagCode  // ✅ теперь передаём CODE
-  
+      if (tagCode) params.tag = tagCode
+
       const res = await api.get("products/", { params })
       setFilteredProducts(res.data)
     } catch (err) {
@@ -89,41 +84,26 @@ const CoffeeListScreen = () => {
 
   const handleSearch = (text: string) => {
     setSearchQuery(text)
-    fetchFilteredProducts(text, selectedTag?.code ?? null) // ✅ передаём code
+    fetchFilteredProducts(text, selectedTag?.code ?? null)
   }
 
   const handleTagSelect = (tag: Tag | null) => {
-    setSelectedTag(tag);
-    setIsTagDropdownOpen(false);
-  
-    const code = tag?.code ?? null;
-    fetchFilteredProducts(searchQuery, code);
-  };
+    setSelectedTag(tag)
+    setIsTagDropdownOpen(false)
+    fetchFilteredProducts(searchQuery, tag?.code ?? null)
+  }
 
-  const closePurchaseModal = () => {
-    setIsPurchaseModalOpen(false);
-    setSelectedProduct(null);
-  };
-
-  const openBasketModal = () => {
-    setIsBasketModalOpen(true);
-  };
-
-  const closeBasketModal = () => {
-    setIsBasketModalOpen(false);
-  };
+  const openPurchaseModal = (product: Product) => {
+    setSelectedProduct(product)
+    setIsPurchaseModalOpen(true)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       {/* — Search and filters — */}
       <View style={styles.header}>
         <View style={styles.searchContainer}>
-          <Feather
-            name="search"
-            size={16}
-            color="#60a5fa"
-            style={styles.searchIcon}
-          />
+          <Feather name="search" size={16} color="#60a5fa" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Найти любимый напиток"
@@ -132,7 +112,8 @@ const CoffeeListScreen = () => {
             onChangeText={handleSearch}
           />
         </View>
-        <TouchableOpacity style={styles.basketButton} onPress={openBasketModal}>
+
+        <TouchableOpacity style={styles.basketButton} onPress={() => setIsBasketModalOpen(true)}>
           <Feather name="shopping-bag" size={20} color="#60a5fa" />
           {totalItems > 0 && (
             <View style={styles.basketBadge}>
@@ -140,23 +121,22 @@ const CoffeeListScreen = () => {
             </View>
           )}
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
         >
           <Feather name="filter" size={20} color="#60a5fa" />
         </TouchableOpacity>
+
         {isTagDropdownOpen && (
           <View style={styles.dropdown}>
             <TouchableOpacity
               onPress={() => handleTagSelect(null)}
               style={[styles.dropdownItem, { backgroundColor: "#1e40af" }]}
             >
-              <Text style={[styles.dropdownText, { fontWeight: "bold" }]}>
-                Все теги
-              </Text>
+              <Text style={[styles.dropdownText, { fontWeight: "bold" }]}>Все теги</Text>
             </TouchableOpacity>
-
             {tags.map((tag) => (
               <TouchableOpacity
                 key={tag.id}
@@ -170,7 +150,7 @@ const CoffeeListScreen = () => {
         )}
       </View>
 
-      {/* — Product list — */}
+      {/* — Coffee list — */}
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.id.toString()}
@@ -179,7 +159,7 @@ const CoffeeListScreen = () => {
           <Card>
             <View style={styles.coffeeItem}>
               <Image
-                source={{ uri: getFullImageUrl(item.image) }}
+                source={{ uri: item.image ? getFullImageUrl(item.image) : "https://via.placeholder.com/80" }}
                 style={styles.coffeeImage}
               />
               <View style={styles.coffeeDetails}>
@@ -197,12 +177,7 @@ const CoffeeListScreen = () => {
                     ))}
                   </View>
                   <View style={styles.beansContainer}>
-                    <Feather
-                      name="coffee"
-                      size={12}
-                      color="#93c5fd"
-                      style={styles.beansIcon}
-                    />
+                    <Feather name="coffee" size={12} color="#93c5fd" />
                     <Text style={styles.beansText}>{item.bean_price}</Text>
                   </View>
                 </View>
@@ -221,63 +196,96 @@ const CoffeeListScreen = () => {
       <PurchaseModal
         coffee={selectedProduct}
         visible={isPurchaseModalOpen}
-        onClose={closePurchaseModal}
+        onClose={() => setIsPurchaseModalOpen(false)}
         userBeans={user?.user?.beans ?? 0}
       />
 
-      <BasketModal visible={isBasketModalOpen} onClose={closeBasketModal} />
+      <BasketModal visible={isBasketModalOpen} onClose={() => setIsBasketModalOpen(false)} />
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  title: {
-    fontSize: 22,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  empty: {
-    color: "#60a5fa",
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 32,
-  },
-  card: {
-    backgroundColor: "#1e3a8a",
-    borderRadius: 12,
+  container: { flex: 1, backgroundColor: "#000" },
+  header: {
+    flexDirection: "row",
     padding: 16,
-    marginBottom: 16,
-    borderColor: "#60a5fa",
+    alignItems: "center",
+  },
+  searchContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "rgba(23, 37, 84, 0.3)",
+    borderRadius: 8,
     borderWidth: 1,
+    borderColor: "#1e3a8a",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignItems: "center",
   },
-  date: {
-    color: "#60a5fa",
-    fontSize: 14,
-    marginBottom: 4,
-    fontWeight: "500",
+  searchIcon: { marginRight: 8 },
+  searchInput: { flex: 1, color: "#fff", fontSize: 14 },
+  basketButton: {
+    width: 40, height: 40, justifyContent: "center", alignItems: "center",
+    marginLeft: 8, borderWidth: 1, borderColor: "#1e3a8a", borderRadius: 8,
   },
-  beans: {
-    color: "#fbbf24",
-    fontSize: 13,
-    marginBottom: 8,
+  basketBadge: {
+    position: "absolute", top: -5, right: -5,
+    backgroundColor: "#1d4ed8", borderRadius: 10, width: 20, height: 20,
+    justifyContent: "center", alignItems: "center",
   },
-  item: {
-    color: "#fff",
-    fontSize: 14,
-    marginBottom: 4,
+  basketBadgeText: { color: "#fff", fontSize: 10, fontWeight: "bold" },
+  filterButton: {
+    width: 40, height: 40, justifyContent: "center", alignItems: "center",
+    marginLeft: 8, borderWidth: 1, borderColor: "#1e3a8a", borderRadius: 8,
   },
-  total: {
-    color: "#93c5fd",
-    fontWeight: "bold",
-    fontSize: 15,
-    marginTop: 8,
-    textAlign: "right",
+  dropdown: {
+    position: "absolute", top: 64, right: 16,
+    backgroundColor: "#1e3a8a", borderRadius: 8,
+    borderColor: "#60a5fa", borderWidth: 1, zIndex: 100,
+  },
+  dropdownItem: {
+    padding: 12, borderBottomWidth: 1, borderBottomColor: "#1e40af",
+  },
+  dropdownText: { color: "#fff" },
+  listContent: { padding: 16 },
+  coffeeItem: { flexDirection: "row", padding: 12 },
+  coffeeImage: {
+    width: 80, height: 80, borderRadius: 8,
+    backgroundColor: "rgba(30, 58, 138, 0.3)",
+  },
+  coffeeDetails: { flex: 1, marginLeft: 12 },
+  coffeeHeader: {
+    flexDirection: "row", justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  coffeeName: {
+    fontSize: 16, fontWeight: "500", color: "#fff",
+    flex: 1, marginRight: 8,
+  },
+  coffeePrice: { fontSize: 16, fontWeight: "bold", color: "#93c5fd" },
+  coffeeDescription: {
+    fontSize: 12, color: "#60a5fa",
+    marginTop: 4, marginBottom: 8,
+  },
+  coffeeFooter: {
+    flexDirection: "row", justifyContent: "space-between",
+    alignItems: "center", marginBottom: 8,
+  },
+  tagsContainer: {
+    flexDirection: "row", flexWrap: "wrap", flex: 1,
+  },
+  beansContainer: {
+    flexDirection: "row", alignItems: "center",
+  },
+  beansText: { color: "#93c5fd", fontSize: 12, marginLeft: 4 },
+  buyButton: {
+    backgroundColor: "#1d4ed8", borderRadius: 4,
+    paddingVertical: 6, alignItems: "center",
+  },
+  buyButtonText: {
+    color: "#fff", fontSize: 12, fontWeight: "500",
   },
 })
 
-export default CoffeeListScreen;
+export default CoffeeListScreen

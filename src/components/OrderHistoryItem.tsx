@@ -1,6 +1,7 @@
 import React from "react"
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, Image } from "react-native"
 import { Feather } from "@expo/vector-icons"
+import { getFullImageUrl } from "../services/GetfullImageUri"
 
 type Product = {
   id: number
@@ -24,9 +25,9 @@ type Order = {
   items: OrderItem[]
 }
 
-export default function OrderCard({ order }: { order: Order }) {
+export default function OrderHistoryItem({ order }: { order: Order }) {
   return (
-    <View style={styles.card}>
+    <View style={styles.wrapper}>
       <View style={styles.header}>
         <Feather name="shopping-bag" size={16} color="#60a5fa" />
         <Text style={styles.title}>
@@ -36,25 +37,37 @@ export default function OrderCard({ order }: { order: Order }) {
 
       <Text style={styles.beans}>+{order.beans_earned} beans</Text>
 
+      <View style={styles.imageRow}>
+        {order.items.map((item, idx) => (
+          <Image
+            key={idx}
+            source={{ uri: getFullImageUrl(item.product?.image || "") }}
+            style={styles.productImage}
+          />
+        ))}
+      </View>
+
       {order.items.map((item, idx) => (
         <Text key={idx} style={styles.item}>
           {item.quantity}× {item.product?.name} — {item.price_per_item}₸
         </Text>
       ))}
 
-      <Text style={styles.total}>Итого: {parseFloat(order.total_price).toFixed(2)}₸</Text>
+      <Text style={styles.total}>
+        Итого: {parseFloat(order.total_price).toFixed(2)}₸
+      </Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#1e3a8a",
-    borderRadius: 12,
+  wrapper: {
+    backgroundColor: "rgba(30, 58, 138, 0.2)",
+    borderRadius: 8,
     padding: 16,
-    marginBottom: 16,
+    marginVertical: 8,
     borderWidth: 1,
-    borderColor: "#60a5fa",
+    borderColor: "#1e40af",
   },
   header: {
     flexDirection: "row",
@@ -70,11 +83,24 @@ const styles = StyleSheet.create({
   beans: {
     color: "#fbbf24",
     fontSize: 13,
+    fontWeight: "600",
     marginBottom: 8,
+  },
+  imageRow: {
+    flexDirection: "row",
+    marginBottom: 8,
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  productImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: "rgba(30,58,138,0.4)",
   },
   item: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 13,
     marginBottom: 4,
   },
   total: {
@@ -85,3 +111,4 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
 })
+
