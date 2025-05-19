@@ -22,7 +22,7 @@ export default function LoginScreen() {
   const [phone, setPhone] = useState("")
   const [error, setError] = useState("")
 
-  const { setUser } = useUser() // внутри компонента
+  const { fetchAndSetUser } = useUser()
 
   const validatePhone = () => {
     const digitsOnly = phone.replace(/\D/g, "")
@@ -40,11 +40,7 @@ export default function LoginScreen() {
       await AsyncStorage.setItem("token", res.access)
       await AsyncStorage.setItem("refresh_token", res.refresh)
   
-      // ⬇️ Загружаем профиль
-      const profile = await api.get("profile/", {
-        headers: { Authorization: `Bearer ${res.access}` },
-      })
-      setUser(profile.data)
+      await fetchAndSetUser()
   
       navigation.navigate("ConfirmCode", { phone })
     } catch (err) {

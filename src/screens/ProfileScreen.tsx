@@ -9,10 +9,14 @@ import Card from "../components/Card"
 import ProgressBar from "../components/ProgressBar"
 import { useNavigation } from "@react-navigation/native"
 import { getFullImageUrl } from "../services/GetfullImageUri"
+import { useUser } from "../context/UserContext"
+
+
 
 const ProfileScreen = () => {
   const [profile, setProfile] = useState(null)
   const navigation = useNavigation()
+  const { setUser } = useUser() // добавить
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -34,6 +38,7 @@ const ProfileScreen = () => {
 
   const handleSignOut = async () => {
     await AsyncStorage.clear()
+    setUser(null) // 🟢 сбросим пользователя в контексте
     navigation.reset({
       index: 0,
       routes: [{ name: "Login" }],

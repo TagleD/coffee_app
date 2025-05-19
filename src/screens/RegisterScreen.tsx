@@ -14,11 +14,13 @@ import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { registerUser } from '../services/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useUser } from "../context/UserContext"
 
 export default function RegisterScreen() {
   const navigation = useNavigation()
   const [phone, setPhone] = useState("")
   const [error, setError] = useState("")
+  const { fetchAndSetUser } = useUser()
 
   const validatePhone = () => {
     const digitsOnly = phone.replace(/\D/g, "")
@@ -35,6 +37,9 @@ export default function RegisterScreen() {
       const { access, refresh } = await registerUser(phone)
       await AsyncStorage.setItem("token", access)
       await AsyncStorage.setItem("refresh_token", refresh)
+  
+      await fetchAndSetUser() // ✅ подтягиваем и записываем профиль в контекст
+  
       navigation.navigate("ConfirmCode", { phone })
     } catch (err) {
       console.error("Ошибка регистрации:", err)
