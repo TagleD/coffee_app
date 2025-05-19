@@ -10,6 +10,7 @@ import TabNavigator from "./TabNavigator"
 import { navigationRef } from "../services/RootNavigation" 
 import PaymentScreen from "../screens/PaymentScreen"
 import DailySpinScreen from "../screens/DailySpinScreen"
+import OrderHistoryScreen from "../screens/OrderHistoryScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -25,6 +26,7 @@ export default function RootNavigator({ initialRoute = "Login" }) {
         <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ title: "Edit Profile" }} />
         <Stack.Screen name="Payment" component={PaymentScreen} />
         <Stack.Screen name="DailySpin" component={DailySpinScreen} />
+        <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ title: "История заказов" }} />
       </Stack.Navigator>
     </NavigationContainer>
   )

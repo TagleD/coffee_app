@@ -35,7 +35,7 @@ export default function RegisterScreen() {
       const { access, refresh } = await registerUser(phone)
       await AsyncStorage.setItem("token", access)
       await AsyncStorage.setItem("refresh_token", refresh)
-      navigation.navigate("Tabs")
+      navigation.navigate("ConfirmCode", { phone })
     } catch (err) {
       console.error("Ошибка регистрации:", err)
       setError("Ошибка на сервере")

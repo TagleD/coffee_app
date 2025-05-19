@@ -235,159 +235,49 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000",
   },
-  header: {
-    flexDirection: "row",
-    padding: 16,
-    alignItems: "center",
-  },
-  searchContainer: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "rgba(23, 37, 84, 0.3)",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#1e3a8a",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    alignItems: "center",
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
+  title: {
+    fontSize: 22,
     color: "#fff",
-    fontSize: 14,
-  },
-  basketButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 8,
-    borderWidth: 1,
-    borderColor: "#1e3a8a",
-    borderRadius: 8,
-  },
-  basketBadge: {
-    position: "absolute",
-    top: -5,
-    right: -5,
-    backgroundColor: "#1d4ed8",
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  basketBadgeText: {
-    color: "#fff",
-    fontSize: 10,
     fontWeight: "bold",
+    marginBottom: 16,
   },
-  filterButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 8,
-    borderWidth: 1,
-    borderColor: "#1e3a8a",
-    borderRadius: 8,
-  },
-  listContent: {
-    padding: 16,
-  },
-  coffeeItem: {
-    flexDirection: "row",
-    padding: 12,
-  },
-  coffeeImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    backgroundColor: "rgba(30, 58, 138, 0.3)",
-  },
-  coffeeDetails: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  coffeeHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  coffeeName: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#fff",
-    flex: 1,
-    marginRight: 8,
-  },
-  coffeePrice: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#93c5fd",
-  },
-  coffeeDescription: {
-    fontSize: 12,
+  empty: {
     color: "#60a5fa",
-    marginTop: 4,
-    marginBottom: 8,
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 32,
   },
-  coffeeFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  tagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 1,
-  },
-  beansContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  beansIcon: {
-    marginRight: 4,
-  },
-  beansText: {
-    color: "#93c5fd",
-    fontSize: 12,
-  },
-  buyButton: {
-    backgroundColor: "#1d4ed8",
-    borderRadius: 4,
-    paddingVertical: 6,
-    alignItems: "center",
-  },
-  buyButtonText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "500",
-  },
-  dropdown: {
-    position: "absolute",
-    top: 64,
-    right: 16,
+  card: {
     backgroundColor: "#1e3a8a",
-    borderRadius: 8,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
     borderColor: "#60a5fa",
     borderWidth: 1,
-    zIndex: 100,
   },
-
-  dropdownItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#1e40af",
+  date: {
+    color: "#60a5fa",
+    fontSize: 14,
+    marginBottom: 4,
+    fontWeight: "500",
   },
-
-  dropdownText: {
+  beans: {
+    color: "#fbbf24",
+    fontSize: 13,
+    marginBottom: 8,
+  },
+  item: {
     color: "#fff",
+    fontSize: 14,
+    marginBottom: 4,
   },
-});
+  total: {
+    color: "#93c5fd",
+    fontWeight: "bold",
+    fontSize: 15,
+    marginTop: 8,
+    textAlign: "right",
+  },
+})
 
 export default CoffeeListScreen;

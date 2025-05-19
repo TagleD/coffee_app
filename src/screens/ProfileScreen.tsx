@@ -58,7 +58,7 @@ const ProfileScreen = () => {
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>{fullName}</Text>
-            <Text style={styles.profileSubtitle}>Coffee Enthusiast</Text>
+            <Text style={styles.profileSubtitle}>Coffee Этузиаст</Text>
             <View style={styles.beansContainer}>
               <Feather name="coffee" size={16} color="#93c5fd" style={styles.beansIcon} />
               <Text style={styles.beansCount}>{beans}</Text>
@@ -71,25 +71,25 @@ const ProfileScreen = () => {
           <View style={styles.membershipCard}>
             <View style={styles.membershipHeader}>
               <View>
-                <Text style={styles.membershipTitle}>Gold Member</Text>
-                <Text style={styles.membershipDate}>Since October 2023</Text>
+                <Text style={styles.membershipTitle}>Золотой участник</Text>
+                <Text style={styles.membershipDate}>С Октября 2023</Text>
               </View>
               <Feather name="award" size={24} color="#fbbf24" />
             </View>
             <ProgressBar value={65} />
             <View style={styles.membershipProgress}>
-              <Text style={styles.membershipLevel}>Current: Gold</Text>
-              <Text style={styles.membershipNext}>Next: Platinum (5,000 beans)</Text>
+              <Text style={styles.membershipLevel}>Текущий: Золото</Text>
+              <Text style={styles.membershipNext}>Следующий: Платинка (5,000 beans)</Text>
             </View>
           </View>
         </Card>
 
-        <Text style={styles.sectionTitle}>Account</Text>
+        <Text style={styles.sectionTitle}>Аккаунт</Text>
         <Card>
-          <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("OrderHistory")}>
             <View style={styles.menuItemLeft}>
               <Feather name="clock" size={20} color="#60a5fa" style={styles.menuIcon} />
-              <Text style={styles.menuText}>Purchase History</Text>
+              <Text style={styles.menuText}>История Покупок</Text>
             </View>
             <Feather name="chevron-right" size={20} color="#60a5fa" />
           </TouchableOpacity>
@@ -97,7 +97,7 @@ const ProfileScreen = () => {
           <TouchableOpacity style={styles.menuItem}>
             <View style={styles.menuItemLeft}>
               <Feather name="gift" size={20} color="#60a5fa" style={styles.menuIcon} />
-              <Text style={styles.menuText}>Rewards</Text>
+              <Text style={styles.menuText}>Награды</Text>
             </View>
             <Feather name="chevron-right" size={20} color="#60a5fa" />
           </TouchableOpacity>
@@ -113,13 +113,13 @@ const ProfileScreen = () => {
           <TouchableOpacity style={styles.menuItem}>
             <View style={styles.menuItemLeft}>
               <Feather name="calendar" size={20} color="#60a5fa" style={styles.menuIcon} />
-              <Text style={styles.menuText}>Subscriptions</Text>
+              <Text style={styles.menuText}>Подписки</Text>
             </View>
             <Feather name="chevron-right" size={20} color="#60a5fa" />
           </TouchableOpacity>
         </Card>
 
-        <Text style={styles.sectionTitle}>Preferences</Text>
+        <Text style={styles.sectionTitle}>Настройки</Text>
         <Card>
           <TouchableOpacity
             style={styles.menuItem}
@@ -127,14 +127,14 @@ const ProfileScreen = () => {
           >
             <View style={styles.menuItemLeft}>
               <Feather name="settings" size={20} color="#60a5fa" style={styles.menuIcon} />
-              <Text style={styles.menuText}>Settings</Text>
+              <Text style={styles.menuText}>Редактирование Аккаунта</Text>
             </View>
             <Feather name="chevron-right" size={20} color="#60a5fa" />
           </TouchableOpacity>
         </Card>
 
         <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-          <Text style={styles.signOutText}>Sign Out</Text>
+          <Text style={styles.signOutText}>Выйти</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

@@ -37,7 +37,7 @@ const HomeScreen = () => {
           <Card>
             <View style={styles.cardContent}>
               <View style={styles.levelHeader}>
-                <Text style={styles.levelTitle}>Bean Level</Text>
+                <Text style={styles.levelTitle}>Уровень</Text>
                 <Text style={styles.levelValue}>Level {currentLevel}</Text>
               </View>
               <ProgressBar value={progress} />
@@ -45,17 +45,17 @@ const HomeScreen = () => {
             </View>
           </Card>
 
-          <Text style={styles.sectionTitle}>Daily Games</Text>
+          <Text style={styles.sectionTitle}>Ежедневные игры</Text>
           <View style={styles.gamesContainer}>
             <Card style={styles.gameCard}>
               <View style={styles.gameContent}>
                 <View style={styles.gameIconContainer}>
                   <Feather name="award" size={24} color="#93c5fd" />
                 </View>
-                <Text style={styles.gameTitle}>Bean Quiz</Text>
+                <Text style={styles.gameTitle}>Квиз</Text>
                 <Text style={styles.gameReward}>+100 beans</Text>
                 <TouchableOpacity style={styles.gameButton}>
-                  <Text style={styles.gameButtonText}>Play</Text>
+                  <Text style={styles.gameButtonText}>Играть</Text>
                 </TouchableOpacity>
               </View>
             </Card>
@@ -65,22 +65,22 @@ const HomeScreen = () => {
                 <View style={styles.gameIconContainer}>
                   <Feather name="gift" size={24} color="#93c5fd" />
                 </View>
-                <Text style={styles.gameTitle}>Daily Spin</Text>
-                <Text style={styles.gameReward}>Up to 500 beans</Text>
+                <Text style={styles.gameTitle}>Вращение</Text>
+                <Text style={styles.gameReward}>до 1000 beans</Text>
                 <TouchableOpacity
                   style={styles.gameButton}
                   onPress={() => navigation.navigate("DailySpin")}
                 >
-                  <Text style={styles.gameButtonText}>Spin</Text>
+                  <Text style={styles.gameButtonText}>Крутить</Text>
                 </TouchableOpacity>
               </View>
             </Card>
           </View>
 
           <View style={styles.rewardsHeader}>
-            <Text style={styles.sectionTitle}>Rewards</Text>
+            <Text style={styles.sectionTitle}>Награды</Text>
             <TouchableOpacity>
-              <Text style={styles.seeAllText}>See all</Text>
+              <Text style={styles.seeAllText}>Смотреть все</Text>
             </TouchableOpacity>
           </View>
 
@@ -90,11 +90,11 @@ const HomeScreen = () => {
                 <Feather name="coffee" size={24} color="#93c5fd" />
               </View>
               <View style={styles.rewardInfo}>
-                <Text style={styles.rewardTitle}>Free Coffee</Text>
-                <Text style={styles.rewardDescription}>Redeem 1,000 beans</Text>
+                <Text style={styles.rewardTitle}>Бесплатный кофе</Text>
+                <Text style={styles.rewardDescription}>1,000 beans</Text>
               </View>
               <TouchableOpacity style={styles.claimButton}>
-                <Text style={styles.claimButtonText}>Claim</Text>
+                <Text style={styles.claimButtonText}>Забрать</Text>
               </TouchableOpacity>
             </View>
           </Card>
@@ -265,4 +265,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default HomeScreen
+export default HomeScreen;

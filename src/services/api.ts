@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as RootNavigation from './RootNavigation' // создадим ниже
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.84:8456/api/', // ← твой IP
+  // baseURL: 'https://coffebeam.duckdns.org/api/', // ← твой IP
+  baseURL: 'http://192.168.1.84:8456/api/',
   headers: {
     'Content-Type': 'application/json',
   },

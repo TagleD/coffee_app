@@ -85,7 +85,7 @@ export default function DailySpinScreen() {
       <View style={styles.wheelWrapper}>
         <View style={styles.pointer} />
         <Animated.View style={[styles.wheel, rotateStyle]}>
-          <Image source={require("../../assets/spin.png")} style={styles.image} />
+          <Image source={require("../../assets/wheel_asset.jpg")} style={styles.image} />
         </Animated.View>
       </View>
       <TouchableOpacity

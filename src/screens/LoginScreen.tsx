@@ -46,7 +46,7 @@ export default function LoginScreen() {
       })
       setUser(profile.data)
   
-      navigation.navigate("Tabs")
+      navigation.navigate("ConfirmCode", { phone })
     } catch (err) {
       console.error("Ошибка логина:", err)
       setError("Пользователь не найден")
