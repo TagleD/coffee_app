@@ -15,18 +15,18 @@ const Badge: React.FC<BadgeProps> = ({ label }) => {
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: "rgba(23, 37, 84, 0.3)",
+    backgroundColor: "#f0fdf4", // чуть светлее и мягче
     borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderWidth: 1,
-    borderColor: "#1e40af",
-    marginRight: 4,
-    marginBottom: 4,
+    borderColor: "#bbf7d0", // светлая граница
+    marginRight: 6,
+    marginBottom: 6,
   },
   text: {
-    color: "#93c5fd",
-    fontSize: 10,
+    color: "#166534", // основной зелёный
+    fontSize: 11,
     fontWeight: "500",
   },
 })

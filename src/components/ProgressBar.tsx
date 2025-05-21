@@ -16,13 +16,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ value }) => {
 const styles = StyleSheet.create({
   container: {
     height: 8,
-    backgroundColor: "#172554",
+    backgroundColor: "#ecfdf5",
     borderRadius: 4,
     overflow: "hidden",
   },
   progress: {
     height: "100%",
-    backgroundColor: "#60a5fa",
+    backgroundColor: "#22c55e",
   },
 })
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
-import { View, StyleSheet, type ViewStyle } from "react-native"
+import type { ViewStyle } from "react-native"
+import { View, StyleSheet } from "react-native"
 
 interface CardProps {
   children: ReactNode
@@ -12,12 +13,17 @@ const Card = ({ children, style }: CardProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "rgba(30, 58, 138, 0.2)",
-    borderRadius: 8,
+    backgroundColor: "#fff", // светлая карточка
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#1e40af",
-    overflow: "hidden",
+    borderColor: "#e5e7eb", // светло-серый бордер
     marginVertical: 8,
+    padding: 12, // добавим немного паддинга для внутреннего контента
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
 })
 
