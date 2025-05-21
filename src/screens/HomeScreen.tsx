@@ -54,7 +54,10 @@ const HomeScreen = () => {
                 </View>
                 <Text style={styles.gameTitle}>Квиз</Text>
                 <Text style={styles.gameReward}>+100 beans</Text>
-                <TouchableOpacity style={styles.gameButton}>
+                <TouchableOpacity
+                  style={styles.gameButton}
+                  onPress={() => navigation.navigate("DailyQuiz")}
+                >
                   <Text style={styles.gameButtonText}>Играть</Text>
                 </TouchableOpacity>
               </View>
