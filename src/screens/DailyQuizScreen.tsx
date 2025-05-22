@@ -35,7 +35,6 @@ export default function DailyQuizScreen() {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      // Последний вопрос — отправляем
       try {
         const token = await AsyncStorage.getItem("token")
         const res = await api.post("/daily_quiz/", { answers: newAnswers }, {
@@ -43,10 +42,7 @@ export default function DailyQuizScreen() {
         })
         await fetchAndSetUser()
         Alert.alert("Готово!", `Вы получили ${res.data.reward} beans`, [
-          {
-            text: "Ок",
-            onPress: () => navigation.navigate("Home"),
-          },
+          { text: "Ок", onPress: () => navigation.navigate("Home") },
         ])
       } catch (err: any) {
         Alert.alert("Ошибка", err?.response?.data?.detail || "Не удалось отправить ответы")
@@ -80,18 +76,39 @@ export default function DailyQuizScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0f172a", padding: 16 },
-  questionBlock: { marginTop: 64 },
-  questionText: { color: "#fff", fontSize: 20, marginBottom: 16 },
-  progressText: { color: "#93c5fd", fontSize: 14, marginBottom: 12 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 16,
+  },
+  questionBlock: {
+    marginTop: 64,
+  },
+  progressText: {
+    color: "#4d7c0f",
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  questionText: {
+    color: "#166534",
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 16,
+  },
   option: {
     padding: 14,
-    backgroundColor: "#1e3a8a",
+    backgroundColor: "#ecfdf5",
+    borderColor: "#d1fae5",
+    borderWidth: 1,
     borderRadius: 8,
     marginBottom: 12,
   },
   selected: {
-    backgroundColor: "#2563eb",
+    backgroundColor: "#bbf7d0",
+    borderColor: "#22c55e",
   },
-  optionText: { color: "#fff", fontSize: 16 },
+  optionText: {
+    color: "#166534",
+    fontSize: 16,
+  },
 })

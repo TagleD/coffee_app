@@ -118,28 +118,29 @@ const EditProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   inner: {
     padding: 24,
   },
   title: {
     fontSize: 24,
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     marginBottom: 24,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#1e3a8a",
+    borderColor: "#bbf7d0",
+    backgroundColor: "#f0fdf4",
     borderRadius: 8,
     padding: 12,
-    color: "#fff",
+    color: "#166534",
     fontSize: 16,
     marginBottom: 12,
   },
   saveButton: {
-    backgroundColor: "#1d4ed8",
+    backgroundColor: "#16a34a",
     padding: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -163,12 +164,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: "#1e3a8a",
+    backgroundColor: "#bbf7d0",
     justifyContent: "center",
     alignItems: "center",
   },
   avatarText: {
-    color: "#60a5fa",
+    color: "#166534",
+    fontWeight: "500",
   },
 })
 

@@ -4,7 +4,6 @@ import { Feather } from "@expo/vector-icons"
 import { useBasket } from "../context/BasketContext"
 import { useNavigation } from "@react-navigation/native"
 
-
 interface BasketModalProps {
   visible: boolean
   onClose: () => void
@@ -15,8 +14,8 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
   const navigation = useNavigation()
 
   const handleCheckout = () => {
-    onClose() // Закрываем модалку
-    navigation.navigate("Payment") // 👉 Переход на экран оплаты
+    onClose()
+    navigation.navigate("Payment")
   }
 
   const total = subtotal
@@ -27,18 +26,18 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
         <View style={styles.modalView}>
           <View style={styles.header}>
             <View style={styles.titleContainer}>
-              <Feather name="shopping-bag" size={20} color="#60a5fa" style={styles.titleIcon} />
+              <Feather name="shopping-bag" size={20} color="#166534" style={styles.titleIcon} />
               <Text style={styles.title}>Ваша корзина ({totalItems})</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Feather name="x" size={20} color="#60a5fa" />
+              <Feather name="x" size={20} color="#166534" />
             </TouchableOpacity>
           </View>
           <Text style={styles.subtitle}>Проверьте товары перед оформлением</Text>
 
           {items.length === 0 ? (
             <View style={styles.emptyBasket}>
-              <Feather name="shopping-bag" size={48} color="#1e3a8a" style={styles.emptyIcon} />
+              <Feather name="shopping-bag" size={48} color="#dcfce7" style={styles.emptyIcon} />
               <Text style={styles.emptyText}>Ваша корзина пуста</Text>
               <TouchableOpacity style={styles.continueButton} onPress={onClose}>
                 <Text style={styles.continueButtonText}>Продолжить покупки</Text>
@@ -56,19 +55,18 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
                     <View style={styles.itemDetails}>
                       <Text style={styles.itemName}>{item.name}</Text>
                       <View style={styles.itemMeta}>
-                        <Text style={styles.itemQuantity}>Qty: {item.quantity}</Text>
+                        <Text style={styles.itemQuantity}>Кол-во: {item.quantity}</Text>
                         <Text style={styles.itemPrice}>{(item.price * item.quantity).toFixed(2)} тг.</Text>
                       </View>
                     </View>
                     <TouchableOpacity style={styles.removeButton} onPress={() => removeFromBasket(item.id)}>
-                      <Feather name="trash-2" size={16} color="#60a5fa" />
+                      <Feather name="trash-2" size={16} color="#166534" />
                     </TouchableOpacity>
                   </View>
                 )}
               />
 
               <View style={styles.summary}>
-    
                 <View style={styles.separator} />
                 <View style={styles.summaryRow}>
                   <Text style={styles.totalLabel}>Итого</Text>
@@ -102,11 +100,11 @@ const styles = StyleSheet.create({
   modalView: {
     width: "90%",
     maxHeight: "80%",
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 20,
     borderWidth: 1,
-    borderColor: "#1e3a8a",
+    borderColor: "#e5e7eb",
   },
   header: {
     flexDirection: "row",
@@ -124,11 +122,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#166534",
   },
   subtitle: {
     fontSize: 14,
-    color: "#60a5fa",
+    color: "#4d7c0f",
     marginBottom: 16,
   },
   closeButton: {
@@ -143,18 +141,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   emptyText: {
-    color: "#60a5fa",
+    color: "#4d7c0f",
     marginBottom: 16,
   },
   continueButton: {
     borderWidth: 1,
-    borderColor: "#1e40af",
+    borderColor: "#16a34a",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
   continueButtonText: {
-    color: "#93c5fd",
+    color: "#166534",
   },
   itemsList: {
     maxHeight: 300,
@@ -168,14 +166,14 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 8,
-    backgroundColor: "rgba(30, 58, 138, 0.3)",
+    backgroundColor: "#f0fdf4",
   },
   itemDetails: {
     flex: 1,
     marginLeft: 12,
   },
   itemName: {
-    color: "#fff",
+    color: "#166534",
     fontWeight: "500",
     marginBottom: 4,
   },
@@ -184,11 +182,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   itemQuantity: {
-    color: "#93c5fd",
+    color: "#4d7c0f",
     fontSize: 12,
   },
   itemPrice: {
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
   },
   removeButton: {
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: "#1e3a8a",
+    backgroundColor: "#e5e7eb",
     marginVertical: 8,
   },
   summaryRow: {
@@ -207,21 +205,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginVertical: 4,
   },
-  summaryLabel: {
-    color: "#93c5fd",
-    fontSize: 14,
-  },
-  summaryValue: {
-    color: "#fff",
-    fontSize: 14,
-  },
   totalLabel: {
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     fontSize: 16,
   },
   totalValue: {
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     fontSize: 16,
   },
@@ -229,7 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   checkoutButton: {
-    backgroundColor: "#1d4ed8",
+    backgroundColor: "#16a34a",
     borderRadius: 8,
     padding: 12,
     alignItems: "center",
@@ -241,13 +231,13 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     borderWidth: 1,
-    borderColor: "#1e40af",
+    borderColor: "#16a34a",
     borderRadius: 8,
     padding: 12,
     alignItems: "center",
   },
   clearButtonText: {
-    color: "#93c5fd",
+    color: "#166534",
   },
 })
 

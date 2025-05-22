@@ -102,31 +102,23 @@ export default function DailySpinScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff", // белый фон
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0f172a",
     paddingHorizontal: 24,
   },
   subtitle: {
     fontSize: 16,
-    color: "#93c5fd",
+    color: "#4d7c0f", // читаемый зелёный
     fontWeight: "600",
     marginBottom: 6,
   },
   title: {
     fontSize: 28,
-    color: "#fff",
+    color: "#166534", // фирменный тёмно-зелёный
     fontWeight: "bold",
     marginBottom: 24,
     textAlign: "center",
-  },
-  wheel: {
-    width: 250,
-    height: 250,
-    borderRadius: 125,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#1e3a8a",
   },
   wheelWrapper: {
     width: 250,
@@ -134,28 +126,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 32,
+    position: "relative",
   },
   pointer: {
     position: "absolute",
     top: -10,
     width: 0,
     height: 0,
-    borderLeftWidth: 10,
-    borderRightWidth: 10,
-    borderTopWidth: 20,
+    borderLeftWidth: 12,
+    borderRightWidth: 12,
+    borderTopWidth: 24,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
-    borderTopColor: "#60a5fa",
+    borderTopColor: "#16a34a", // насыщенный зелёный
     zIndex: 10,
+  },
+  wheel: {
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0fdf4", // светло-зелёный фон, fallback
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   image: {
     width: 250,
     height: 250,
     borderRadius: 125,
-    position: "absolute",
   },
   button: {
-    backgroundColor: "#2563eb",
+    backgroundColor: "#16a34a",
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -164,9 +169,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    marginTop: 8,
   },
   disabled: {
-    opacity: 0.4,
+    opacity: 0.5,
   },
   buttonText: {
     color: "#fff",
@@ -174,3 +180,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 })
+

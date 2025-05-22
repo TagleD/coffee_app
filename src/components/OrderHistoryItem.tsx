@@ -29,7 +29,7 @@ export default function OrderHistoryItem({ order }: { order: Order }) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.header}>
-        <Feather name="shopping-bag" size={16} color="#60a5fa" />
+        <Feather name="shopping-bag" size={16} color="#166534" />
         <Text style={styles.title}>
           Заказ #{order.id} • {new Date(order.created_at).toLocaleDateString()}
         </Text>
@@ -62,12 +62,12 @@ export default function OrderHistoryItem({ order }: { order: Order }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: "rgba(30, 58, 138, 0.2)",
+    backgroundColor: "#ecfdf5",
     borderRadius: 8,
     padding: 16,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: "#1e40af",
+    borderColor: "#d1fae5",
   },
   header: {
     flexDirection: "row",
@@ -75,13 +75,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     marginLeft: 8,
     fontSize: 14,
   },
   beans: {
-    color: "#fbbf24",
+    color: "#ca8a04", // amber-600
     fontSize: 13,
     fontWeight: "600",
     marginBottom: 8,
@@ -96,19 +96,18 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 8,
-    backgroundColor: "rgba(30,58,138,0.4)",
+    backgroundColor: "#d1fae5",
   },
   item: {
-    color: "#fff",
+    color: "#166534",
     fontSize: 13,
     marginBottom: 4,
   },
   total: {
-    color: "#93c5fd",
+    color: "#166534",
     fontWeight: "bold",
     fontSize: 15,
     marginTop: 8,
     textAlign: "right",
   },
 })
-

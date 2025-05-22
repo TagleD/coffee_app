@@ -53,23 +53,23 @@ const FakePaymentScreen = ({ navigation }: any) => {
     setLoading(true);
 
     try {
-        const payload = {
-            items: items.map((item) => ({
-                product_id: item.id,
-                quantity: item.quantity,
-                price_per_item: item.price,
-              })),
-          }
+      const payload = {
+        items: items.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price_per_item: item.price,
+        })),
+      }
 
       const token = await AsyncStorage.getItem("token")
-        const res = await api.post("create_order/", payload, {
+      const res = await api.post("create_order/", payload, {
         headers: {
-            Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
-        })
+      })
 
       clearBasket();
-      await fetchAndSetUser(); // ✅ обновить профиль с новыми beans
+      await fetchAndSetUser();
 
       Alert.alert("Успех", `Заказ #${res.data.order_id} оформлен. Начислено ${res.data.beans_earned} beans`);
       navigation.navigate("Tabs");
@@ -91,7 +91,7 @@ const FakePaymentScreen = ({ navigation }: any) => {
         keyboardType="numeric"
         value={formatCardNumber(cardNumber)}
         onChangeText={setCardNumber}
-        placeholderTextColor="#60a5fa"
+        placeholderTextColor="#4d7c0f"
         maxLength={19}
       />
       <TextInput
@@ -99,7 +99,7 @@ const FakePaymentScreen = ({ navigation }: any) => {
         placeholder="Имя на карте"
         value={cardHolder}
         onChangeText={setCardHolder}
-        placeholderTextColor="#60a5fa"
+        placeholderTextColor="#4d7c0f"
       />
 
       <View style={styles.rowInputs}>
@@ -108,7 +108,7 @@ const FakePaymentScreen = ({ navigation }: any) => {
           placeholder="MM/YY"
           value={expiry}
           onChangeText={(val) => setExpiry(formatExpiry(val))}
-          placeholderTextColor="#60a5fa"
+          placeholderTextColor="#4d7c0f"
           keyboardType="numeric"
           maxLength={5}
         />
@@ -118,7 +118,7 @@ const FakePaymentScreen = ({ navigation }: any) => {
           value={cvc}
           onChangeText={setCvc}
           keyboardType="numeric"
-          placeholderTextColor="#60a5fa"
+          placeholderTextColor="#4d7c0f"
           maxLength={3}
         />
       </View>
@@ -137,24 +137,24 @@ const FakePaymentScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     padding: 24,
   },
   title: {
     fontSize: 24,
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     marginBottom: 24,
   },
   input: {
-    backgroundColor: "rgba(23, 37, 84, 0.3)",
-    borderColor: "#1e3a8a",
+    backgroundColor: "#f0fdf4",
+    borderColor: "#bbf7d0",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginBottom: 16,
-    color: "#fff",
+    color: "#166534",
   },
   rowInputs: {
     flexDirection: "row",
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 0.48,
   },
   button: {
-    backgroundColor: "#1d4ed8",
+    backgroundColor: "#16a34a",
     borderRadius: 8,
     padding: 16,
     alignItems: "center",

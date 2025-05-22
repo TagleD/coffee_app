@@ -43,7 +43,7 @@ export default function OrderHistoryScreen() {
     fetchOrders()
   }, [])
 
-  if (loading) return <ActivityIndicator color="#fff" style={{ marginTop: 50 }} />
+  if (loading) return <ActivityIndicator color="#166534" style={{ marginTop: 50 }} />
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,22 +60,20 @@ export default function OrderHistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#000",
-    },
-    title: {
-      fontSize: 20,
-      color: "#93c5fd",
-      fontWeight: "600",
-      marginBottom: 12,
-    },
-    empty: {
-      color: "#60a5fa",
-      fontSize: 16,
-      textAlign: "center",
-      marginTop: 32,
-    },
-  })
-  
-
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 20,
+    color: "#166534",
+    fontWeight: "600",
+    marginBottom: 12,
+  },
+  empty: {
+    color: "#4d7c0f",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 32,
+  },
+})

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react"
 import {
   View,
@@ -34,7 +33,7 @@ export default function ConfirmCodeScreen({ route }) {
         style={styles.inner}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <Text style={styles.title}>Код подтверждения</Text>
+        <Text style={styles.title}>Подтверждение</Text>
         <Text style={styles.subtitle}>
           Введите код, отправленный на{" "}
           <Text style={styles.phoneNumber}>{phone}</Text>
@@ -46,7 +45,7 @@ export default function ConfirmCodeScreen({ route }) {
           onChangeText={setCode}
           style={styles.input}
           placeholder="0000"
-          placeholderTextColor="#64748b"
+          placeholderTextColor="#4d7c0f"
         />
         <TouchableOpacity style={styles.button} onPress={handleConfirm}>
           <Text style={styles.buttonText}>Подтвердить</Text>
@@ -59,7 +58,7 @@ export default function ConfirmCodeScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
   },
   inner: {
     flex: 1,
@@ -68,32 +67,33 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
     marginBottom: 16,
   },
   subtitle: {
     fontSize: 14,
-    color: "#60a5fa",
+    color: "#4d7c0f",
     marginBottom: 24,
   },
   phoneNumber: {
     fontWeight: "bold",
-    color: "#93c5fd",
+    color: "#166534",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#1e3a8a",
+    borderColor: "#d1fae5",
+    backgroundColor: "#ecfdf5",
     borderRadius: 8,
     padding: 12,
-    color: "#fff",
+    color: "#166534",
     fontSize: 20,
     textAlign: "center",
     letterSpacing: 12,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: "#1d4ed8",
+    backgroundColor: "#16a34a",
     padding: 14,
     borderRadius: 8,
     alignItems: "center",

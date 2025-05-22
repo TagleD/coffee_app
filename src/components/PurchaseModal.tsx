@@ -8,7 +8,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Pressable,
 } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import Badge from "./Badge"
@@ -37,17 +36,17 @@ const PurchaseModal = ({ visible, onClose, coffee, userBeans }: Props) => {
   const enoughBeans = userBeans - beansUsed >= totalBeansNeeded
 
   const handleAddToBasketMoney = () => {
-    if (!coffee) return;
-    addToBasket(coffee, quantity); // ✅ теперь компилятор не ругается
-    onClose();
-  };
-  
+    if (!coffee) return
+    addToBasket(coffee, quantity)
+    onClose()
+  }
+
   const handleAddToBasketBeans = () => {
-    if (!coffee || !enoughBeans) return;
-    const freeCoffee = { ...coffee, price: 0 };
-    addToBasket(freeCoffee, quantity);
-    onClose();
-  };
+    if (!coffee || !enoughBeans) return
+    const freeCoffee = { ...coffee, price: 0 }
+    addToBasket(freeCoffee, quantity)
+    onClose()
+  }
 
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -56,7 +55,7 @@ const PurchaseModal = ({ visible, onClose, coffee, userBeans }: Props) => {
           <View style={styles.header}>
             <Text style={styles.title}>{coffee.name}</Text>
             <TouchableOpacity onPress={onClose}>
-              <Feather name="x" size={20} color="#60a5fa" />
+              <Feather name="x" size={20} color="#166534" />
             </TouchableOpacity>
           </View>
 
@@ -67,8 +66,8 @@ const PurchaseModal = ({ visible, onClose, coffee, userBeans }: Props) => {
 
           <View style={styles.badgeRow}>
             {coffee.tags.map((tag, idx) => (
-            <Badge key={idx} label={tag.name} />
-          ))}
+              <Badge key={idx} label={tag.name} />
+            ))}
           </View>
 
           <Text style={styles.price}>
@@ -118,11 +117,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    backgroundColor: "#000",
+    backgroundColor: "#fff",
     width: "90%",
     padding: 20,
     borderRadius: 12,
-    borderColor: "#1e3a8a",
+    borderColor: "#d1fae5",
     borderWidth: 1,
   },
   header: {
@@ -132,12 +131,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
   },
   subtitle: {
     fontSize: 14,
-    color: "#60a5fa",
+    color: "#4d7c0f",
     marginBottom: 10,
     marginTop: 4,
   },
@@ -146,10 +145,10 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 12,
     marginBottom: 16,
-    backgroundColor: "rgba(30, 58, 138, 0.3)",
+    backgroundColor: "#f0fdf4",
   },
   description: {
-    color: "#93c5fd",
+    color: "#166534",
     fontSize: 14,
     marginBottom: 10,
   },
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   price: {
-    color: "#fff",
+    color: "#4d7c0f",
     fontWeight: "bold",
     marginBottom: 10,
   },
@@ -173,31 +172,31 @@ const styles = StyleSheet.create({
   },
   control: {
     fontSize: 20,
-    color: "#60a5fa",
+    color: "#166534",
     width: 32,
     height: 32,
     textAlign: "center",
     borderWidth: 1,
-    borderColor: "#1e3a8a",
+    borderColor: "#d1fae5",
     borderRadius: 8,
     lineHeight: 32,
   },
   quantity: {
     fontSize: 18,
-    color: "#fff",
+    color: "#166534",
     fontWeight: "bold",
   },
   buttonRow: {
     gap: 10,
   },
   moneyButton: {
-    backgroundColor: "#1d4ed8",
+    backgroundColor: "#16a34a",
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
   },
   beanButton: {
-    backgroundColor: "#1e3a8a",
+    backgroundColor: "#4d7c0f",
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
