@@ -15,7 +15,13 @@ const BasketModal: React.FC<BasketModalProps> = ({ visible, onClose }) => {
 
   const handleCheckout = () => {
     onClose()
-    navigation.navigate("Payment")
+  
+    if (subtotal === 0) {
+      // сразу оформить заказ без оплаты
+      navigation.navigate("Payment", { skipPayment: true }) // 👈 передаём параметр
+    } else {
+      navigation.navigate("Payment")
+    }
   }
 
   const total = subtotal

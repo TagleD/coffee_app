@@ -51,7 +51,7 @@ const HomeScreen = () => {
                 <View style={styles.gameIconContainer}>
                   <Feather name="award" size={24} color="#fff" />
                 </View>
-                <Text style={styles.gameTitle}>Quiz</Text>
+                <Text style={styles.gameTitle}>Квиз</Text>
                 <Text style={styles.gameReward}>До 300 beans</Text>
                 <TouchableOpacity
                   style={styles.gameButton}

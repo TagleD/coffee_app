@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,26 +9,37 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useBasket } from "../context/BasketContext"
-import { useUser } from "../context/UserContext"
-import api from "../services/api"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useBasket } from "../context/BasketContext";
+import { useUser } from "../context/UserContext";
+import api from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
-const FakePaymentScreen = ({ navigation }: any) => {
+const FakePaymentScreen = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolder, setCardHolder] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
   const [loading, setLoading] = useState(false);
-  const { items, clearBasket } = useBasket();
-  const { fetchAndSetUser } = useUser()
+
+  const { items, clearBasket, subtotal } = useBasket();
+  const { fetchAndSetUser } = useUser();
+  const route = useRoute();
+  const navigation = useNavigation();
+  const skipPayment = route.params?.skipPayment;
+
+  useEffect(() => {
+    if (skipPayment) {
+      handlePayWithoutCard();
+    }
+  }, [skipPayment]);
 
   const formatCardNumber = (value: string) => {
-    return value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+    return value.replace(/[^\d]/g, "").replace(/(.{4})/g, "$1 ").trim();
   };
 
   const formatExpiry = (value: string) => {
-    const cleaned = value.replace(/[^\d]/g, '');
+    const cleaned = value.replace(/[^\d]/g, "");
     if (cleaned.length < 3) return cleaned;
     return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`;
   };
@@ -38,12 +49,45 @@ const FakePaymentScreen = ({ navigation }: any) => {
     const expiryRegex = /^(0[1-9]|1[0-2])\/(\d{2})$/;
     const cvcRegex = /^\d{3}$/;
 
-    if (!cardRegex.test(cardNumber.replace(/\s/g, ''))) return "Введите корректный номер карты (16 цифр)";
+    if (!cardRegex.test(cardNumber.replace(/\s/g, "")))
+      return "Введите корректный номер карты (16 цифр)";
     if (!cardHolder) return "Введите имя на карте";
     if (!expiryRegex.test(expiry)) return "Введите срок действия в формате MM/YY";
     if (!cvcRegex.test(cvc)) return "Введите корректный CVC (3 цифры)";
 
     return null;
+  };
+
+  const handlePayWithoutCard = async () => {
+    setLoading(true);
+
+    try {
+      const payload = {
+        items: items.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          price_per_item: item.price,
+        })),
+      };
+
+      const token = await AsyncStorage.getItem("token");
+      const res = await api.post("create_order/", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      clearBasket();
+      await fetchAndSetUser();
+
+      Alert.alert("Успех", `Заказ #${res.data.order_id} оформлен. Начислено ${res.data.beans_earned} beans`);
+      navigation.navigate("Tabs");
+    } catch (err) {
+      console.error("Ошибка оформления заказа", err);
+      Alert.alert("Ошибка", "Не удалось оформить заказ");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePay = async () => {
@@ -59,14 +103,14 @@ const FakePaymentScreen = ({ navigation }: any) => {
           quantity: item.quantity,
           price_per_item: item.price,
         })),
-      }
+      };
 
-      const token = await AsyncStorage.getItem("token")
+      const token = await AsyncStorage.getItem("token");
       const res = await api.post("create_order/", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       clearBasket();
       await fetchAndSetUser();
@@ -80,6 +124,15 @@ const FakePaymentScreen = ({ navigation }: any) => {
       setLoading(false);
     }
   };
+
+  if (skipPayment) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Оформляем заказ...</Text>
+        {loading && <ActivityIndicator color="#16a34a" size="large" />}
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

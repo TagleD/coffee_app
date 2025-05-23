@@ -42,7 +42,7 @@ export default function DailyQuizScreen() {
         })
         await fetchAndSetUser()
         Alert.alert("Готово!", `Вы получили ${res.data.reward} beans`, [
-          { text: "Ок", onPress: () => navigation.navigate("Home") },
+          { text: "Ок", onPress: () => navigation.navigate("Tabs") },
         ])
       } catch (err: any) {
         Alert.alert("Ошибка", err?.response?.data?.detail || "Не удалось отправить ответы")
